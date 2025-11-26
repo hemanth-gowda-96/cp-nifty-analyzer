@@ -54,20 +54,20 @@ export default function HomePage() {
   return (
     <div className="grid grid-cols-[60%_40%] gap-4 h-screen p-4">
       {/* Left section - 60% */}
-      <div className="flex flex-col overflow-hidden max-h-full">
-      {error && <p>Error: {error}</p>}
-      {data && (
-          <div className="flex-1 overflow-auto">
+      <div className="flex flex-col min-h-0">
+        {error && <p>Error: {error}</p>}
+        {data && (
+          <div className="flex-1 min-h-0 overflow-auto">
             <DataTable columns={ToiRatioColumns} data={data.records}></DataTable>
           </div>
-      )}
+        )}
       </div>
-      
+
       {/* Right section - 40% */}
-      <div className="flex flex-col overflow-hidden max-h-full">
-          <div className="flex-1 h-full max-h-full overflow-hidden">
-            <ToiRatioChartLineDefault />
-          </div>
+      <div className="flex flex-col min-h-0">
+        <div className="flex-1 min-h-0">
+          <ToiRatioChartLineDefault data={data?.records || []} />
+        </div>
       </div>
     </div>
   );

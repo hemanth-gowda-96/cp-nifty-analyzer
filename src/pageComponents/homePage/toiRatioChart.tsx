@@ -20,14 +20,7 @@ import {
 
 export const description = "A line chart"
 
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-]
+
 
 const chartConfig = {
   desktop: {
@@ -36,15 +29,18 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function ToiRatioChartLineDefault() {
+export function ToiRatioChartLineDefault({ data }: { data: Array<{ id: string; ce_total_oi: number; pe_total_oi: number; last_fetched_date: string; ratio: number; created_date: string; last_updated_date: string }> }) {
+
+    // Transform data to fit chartData structure
+    const chartData = data.map((item) => ({
+        time: item.last_fetched_date.slice(11, 16),
+        ratio: item.ratio,
+    }));
+
   return (
-    <Card className="max-h-full">
-      <CardHeader>
-        <CardTitle>Line Chart</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="h-[270px]">
+    <Card className="flex flex-col">
+      <CardContent className="flex-1 flex flex-col">
+        <ChartContainer config={chartConfig} className="flex-1">
           <LineChart
             accessibilityLayer
             data={chartData}
@@ -55,18 +51,18 @@ export function ToiRatioChartLineDefault() {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="time"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickMargin={3}
+              tickFormatter={(value) => value.slice(0, 2)}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
             <Line
-              dataKey="desktop"
+              dataKey="ratio"
               type="natural"
               stroke="var(--color-desktop)"
               strokeWidth={2}
