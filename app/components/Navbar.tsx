@@ -23,6 +23,11 @@ export default function Navbar() {
             <Link href="/nse">NSE</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <Link href="/docs">API Docs</Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
       </NavigationMenu>
     </header>
   );
