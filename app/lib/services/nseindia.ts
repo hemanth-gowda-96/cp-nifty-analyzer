@@ -1,5 +1,6 @@
 // app/api/shared/services/nseindia.ts
 
+import { NSEOptionChainResponse } from "../types/nseindia/nseindiaType";
 import { APIResponseType } from "../types/response/serviceResponseType";
 
 // Service to fetch NSE India option chain indices data
@@ -16,7 +17,7 @@ async function getOptionChainIndices(): Promise<APIResponseType<any>> {
       code: "S001",
       message: "Data fetched successfully",
       data,
-    } as APIResponseType<any>;
+    } as APIResponseType<NSEOptionChainResponse>;
   } catch (error) {
     return {
       code: "E001",
