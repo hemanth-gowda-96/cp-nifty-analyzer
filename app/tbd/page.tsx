@@ -1,8 +1,5 @@
+import TBDPage from "@/src/pageComponents/TBDPage";
+
 export default function TBD() {
-  return (
-    <div>
-      <h1>TBD Page</h1>
-      <p>This page is to be determined.</p>
-    </div>
-  );
+  return <TBDPage />;
 }

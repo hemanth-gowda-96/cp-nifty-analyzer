@@ -1,3 +1,5 @@
+import NSEPage from "@/src/pageComponents/NSEPage";
+
 export default function NSE() {
-  return <div></div>;
+  return <NSEPage />;
 }
