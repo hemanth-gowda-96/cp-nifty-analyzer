@@ -6,7 +6,7 @@ import SwaggerUI from 'swagger-ui-react';
 
 interface SwaggerWrapperProps {
   spec: any;
-  docExpansion?: string;
+  docExpansion?: "list" | "none" | "full";
   deepLinking?: boolean;
   displayRequestDuration?: boolean;
   tryItOutEnabled?: boolean;

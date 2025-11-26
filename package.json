@@ -6,10 +6,18 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:start": "docker-compose up -d postgres",
+    "db:stop": "docker-compose stop postgres",
+    "db:reset": "docker-compose down postgres && docker-compose up -d postgres",
+    "db:migrate": "npx prisma migrate dev",
+    "db:studio": "npx prisma studio"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.0.1",
+    "@prisma/client": "^6.19.0",
     "@radix-ui/react-navigation-menu": "^1.2.14",
+    "@tanstack/react-table": "^8.21.3",
     "@types/swagger-ui-react": "^5.18.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -18,12 +26,12 @@
     "next": "16.0.4",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "recharts": "^2.15.4",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-react": "^5.30.3",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
-    "@prisma/client": "^7.0.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
