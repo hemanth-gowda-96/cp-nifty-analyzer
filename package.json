@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.0.1",
     "@radix-ui/react-navigation-menu": "^1.2.14",
     "@types/swagger-ui-react": "^5.18.0",
     "class-variance-authority": "^0.7.1",
