@@ -58,7 +58,10 @@ export default function HomePage() {
         {error && <p>Error: {error}</p>}
         {data && (
           <div className="flex-1 min-h-0 overflow-auto">
-            <DataTable columns={ToiRatioColumns} data={data.records}></DataTable>
+            <DataTable
+              columns={ToiRatioColumns}
+              data={data.records}
+            ></DataTable>
           </div>
         )}
       </div>
@@ -66,7 +69,7 @@ export default function HomePage() {
       {/* Right section - 40% */}
       <div className="flex flex-col min-h-0">
         <div className="flex-1 min-h-0">
-          <ToiRatioChartLineDefault data={data?.records || []} />
+          {/* <ToiRatioChartLineDefault data={data?.records || []} /> */}
         </div>
       </div>
     </div>
