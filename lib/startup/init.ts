@@ -16,7 +16,7 @@ export async function initializeApp(): Promise<void> {
     DatabaseHealth.startPeriodicChecks();
 
     // Start background task for option chain fetch
-    // startOptionChainBackgroundTask();
+    startOptionChainBackgroundTask();
 
     console.log("✅ Application initialization completed");
   } catch (error) {
