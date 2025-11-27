@@ -1,7 +1,7 @@
 "use client"
 
 import { TrendingUp } from "lucide-react"
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts"
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
 import {
   Card,
@@ -18,7 +18,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-export const description = "A line chart"
+export const description = "An area chart"
 
 
 
@@ -32,16 +32,21 @@ const chartConfig = {
 export function ToiRatioChartLineDefault({ data }: { data: Array<{ id: string; ce_total_oi: number; pe_total_oi: number; last_fetched_date: string; ratio: number; created_date: string; last_updated_date: string }> }) {
 
     // Transform data to fit chartData structure
-    const chartData = data.map((item) => ({
-        time: item.last_fetched_date.slice(11, 16),
-        ratio: item.ratio,
-    }));
+    const chartData = data.map((item) => {
+        // Extract time from "27 Nov 2025, 9:00 pm" format
+        const parts = item.last_fetched_date.split(', ');
+        const time = parts.length > 1 ? parts[1] : item.last_fetched_date;
+        return {
+            time: time,
+            ratio: item.ratio,
+        };
+    }).reverse();
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col h-full">
       <CardContent className="flex-1 flex flex-col">
         <ChartContainer config={chartConfig} className="flex-1">
-          <LineChart
+          <AreaChart
             accessibilityLayer
             data={chartData}
             margin={{
@@ -54,21 +59,22 @@ export function ToiRatioChartLineDefault({ data }: { data: Array<{ id: string; c
               dataKey="time"
               tickLine={false}
               axisLine={false}
-              tickMargin={3}
-              tickFormatter={(value) => value.slice(0, 2)}
+              tickMargin={8}  
+              tickFormatter={(value) => value}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Line
+            <Area
               dataKey="ratio"
-              type="natural"
+              type="linear"
+              fill="var(--color-desktop)"
+              fillOpacity={0.4}
               stroke="var(--color-desktop)"
-              strokeWidth={2}
-              dot={false}
+              dot={{ r: 4, stroke: 'var(--color-desktop)', strokeWidth: 2, fill: '#fff' }}
             />
-          </LineChart>
+          </AreaChart>
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">

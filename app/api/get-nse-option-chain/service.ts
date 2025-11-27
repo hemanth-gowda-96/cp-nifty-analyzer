@@ -6,9 +6,9 @@ async function getNseOptionChainDbService(): Promise<APIResponseType<any>> {
   let result = [];
   try {
     result = await prisma.nSEOCTotalOIRatio.findMany({
-      take: 10,
+      take: 8,
       orderBy: {
-        last_fetched_date: "desc",
+        last_updated_date: "desc",
       },
     });
 

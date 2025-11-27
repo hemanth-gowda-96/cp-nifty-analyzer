@@ -44,12 +44,18 @@ async function getOptionChainIndicesService(): Promise<APIResponseType<any>> {
   // Save to database with real-time connection check
   console.log("🔍 Attempting to save to database...");
 
+  console.log(
+    "NSEOptionChainData:",
+    NSEOptionChainData.records.underlyingValue
+  );
+
   try {
     // Try to save directly - this will test the connection in real-time
     const resp = await prisma.nSEOCTotalOIRatio.create({
       data: {
         ce_total_oi: NSEOptionChainData.filtered.CE.totOI,
         pe_total_oi: NSEOptionChainData.filtered.PE.totOI,
+        underlying_value: NSEOptionChainData.records.underlyingValue,
         last_fetched_date: lastFetchedDate, // Use Date object directly
         ratio: totRatio.totOIRatio,
         // created_date and last_updated_date will be handled by Prisma defaults

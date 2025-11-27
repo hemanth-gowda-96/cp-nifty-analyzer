@@ -58,10 +58,23 @@ export function serializePrismaRecord<T extends Record<string, any>>(
     }
   }
 
-  // Convert Date fields to ISO strings
+  // Convert Date fields to formatted strings
   for (const field of dateFields) {
     if (field in serialized && serialized[field] instanceof Date) {
-      serialized[field] = serialized[field].toISOString();
+      const date = serialized[field] as Date;
+      // For last_fetched_date, format as "27 Nov 2025, 9:00 pm"
+      if (field === "last_fetched_date") {
+        serialized[field] = date.toLocaleString("en-GB", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        });
+      } else {
+        serialized[field] = date.toISOString();
+      }
     }
   }
 
