@@ -69,7 +69,6 @@ export default function HomePage() {
   // Get the latest record for the title bar
   const latestRecord = data?.records?.[0];
 
-  console.log("latestRecord", latestRecord);
 
     
   const handleRefresh = () => {
@@ -91,10 +90,10 @@ export default function HomePage() {
           {error && <p>Error: {error}</p>}
           {data && (
             <div>
-              <DataTable
-                columns={ToiRatioColumns}
-                data={data.records}
-              ></DataTable>
+                <DataTable
+                  columns={ToiRatioColumns}
+                  data={data.records}
+                />
             </div>
           )}
         </div>
@@ -114,10 +113,10 @@ export default function HomePage() {
           {error && <p>Error: {error}</p>}
           {data && (
             <div>
-              <DataTable
-                columns={CallNputRationColumns}
-                data={callPutData?.records || []}
-              ></DataTable>
+                <DataTable
+                  columns={CallNputRationColumns}
+                  data={callPutData?.records || []}
+                />
             </div>
           )}
         </div>

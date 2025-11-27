@@ -35,24 +35,24 @@ export const TitleBar: React.FC<TitleBarProps> = ({
     : "N/A";
 
   return (
-    <div className="flex justify-between items-center bg-gray-900 text-white p-4 shadow-md">
-      <div className="text-xl font-bold">{title}</div>
-      <div className="flex gap-6 items-center text-sm">
+    <div className="flex justify-between items-center p-5 shadow-lg rounded-b-xl border-b-4 border-blue-500 bg-gradient-to-r from-gray-900 via-gray-800 to-blue-900 text-white">
+      <div className="text-2xl font-extrabold tracking-tight drop-shadow-lg">{title}</div>
+      <div className="flex gap-8 items-center text-base">
         <div>
-          <span className="text-gray-400 mr-2">Underlying Value:</span>
-          <span className="font-semibold text-green-400">{formattedValue}</span>
+          <span className="text-gray-300 mr-2">Underlying Value:</span>
+          <span className="font-bold text-green-400 text-lg">{formattedValue}</span>
         </div>
         <div>
-          <span className="text-gray-400 mr-2">Last Fetched:</span>
-          <span className="font-semibold text-blue-400">{formattedTimestamp}</span>
+          <span className="text-gray-300 mr-2">Last Fetched:</span>
+          <span className="font-semibold text-blue-300">{formattedTimestamp}</span>
         </div>
         {onRefresh && (
           <button
             onClick={onRefresh}
-            className="ml-4 px-3 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow transition"
+            className="ml-6 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg transition border border-blue-400"
             title="Refresh Data"
           >
-            &#x21bb; Refresh
+            <span className="mr-1">&#x21bb;</span> Refresh
           </button>
         )}
       </div>
