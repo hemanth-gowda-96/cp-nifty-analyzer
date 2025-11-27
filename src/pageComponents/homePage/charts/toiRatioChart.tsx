@@ -43,7 +43,8 @@ export function ToiRatioChartLineDefault({ data }: { data: Array<{ id: string; c
       <CardContent className="flex-1 flex flex-col">
         <ChartContainer config={chartConfig} className="flex-1">
           <AreaChart
-            accessibilityLayer
+            width={600}
+            height={300}
             data={chartData}
             margin={{
               left: 12,
@@ -55,7 +56,7 @@ export function ToiRatioChartLineDefault({ data }: { data: Array<{ id: string; c
               dataKey="time"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}  
+              tickMargin={8}
               tickFormatter={(value) => value}
             />
             <ChartTooltip

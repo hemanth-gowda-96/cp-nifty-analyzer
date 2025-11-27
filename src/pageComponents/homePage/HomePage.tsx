@@ -69,7 +69,6 @@ export default function HomePage() {
   // Get the latest record for the title bar
   const latestRecord = data?.records?.[0];
 
-  console.log("latestRecord", latestRecord);
 
     
   const handleRefresh = () => {
@@ -78,23 +77,24 @@ export default function HomePage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen overflow-x-hidden pr-8">
+    <div className="flex flex-col min-h-screen overflow-x-hidden pr-8 bg-gradient-to-br from-blue-50 via-white to-blue-100">
       <TitleBar
         title="NSE Option Chain Total OI Ratio"
         underlyingValue={latestRecord?.underlying_value}
         timestamp={latestRecord?.last_fetched_date}
         onRefresh={handleRefresh}
       />
-      <div className="grid grid-cols-[60%_40%] gap-4 p-4">
+      <div className="grid grid-cols-[60%_40%] gap-8 p-8">
         {/* Left section - 60% */}
-        <div className="flex flex-col">
-          {error && <p>Error: {error}</p>}
+        <div className="flex flex-col bg-white/90 rounded-2xl shadow-xl p-6 border border-gray-200 hover:shadow-2xl transition duration-200">
+          <h2 className="text-lg font-bold text-blue-900 mb-4 tracking-wide">Total OI Ratio Table</h2>
+          {error && <p className="text-red-600 font-semibold mb-2">Error: {error}</p>}
           {data && (
-            <div>
-              <DataTable
-                columns={ToiRatioColumns}
-                data={data.records}
-              ></DataTable>
+            <div className="overflow-x-auto">
+                <DataTable
+                  columns={ToiRatioColumns}
+                  data={data.records}
+                />
             </div>
           )}
         </div>
@@ -102,22 +102,23 @@ export default function HomePage() {
         {/* Right section - 40% */}
         <div className="flex flex-col pr-8">
           {data && (
-            <div className="h-full">
+            <div className="h-full bg-white/90 rounded-2xl shadow-xl p-6 border border-gray-200  hover:shadow-2xl transition duration-200">
               <ToiRatioChartLineDefault data={data.records} />
             </div>
           )}
         </div>
       </div>
-      <div className="grid grid-cols-[60%_40%] gap-4 p-4">
+      <div className="grid grid-cols-[60%_40%] gap-8 p-8">
         {/* Left section - 60% */}
-        <div className="flex flex-col">
-          {error && <p>Error: {error}</p>}
+        <div className="flex flex-col bg-white/90 rounded-2xl shadow-xl p-6 border border-gray-200 hover:shadow-2xl transition duration-200">
+          <h2 className="text-lg font-bold text-blue-900 mb-4 tracking-wide">Call/Put OI Ratio Table</h2>
+          {error && <p className="text-red-600 font-semibold mb-2">Error: {error}</p>}
           {data && (
-            <div>
-              <DataTable
-                columns={CallNputRationColumns}
-                data={callPutData?.records || []}
-              ></DataTable>
+            <div className="overflow-x-auto">
+                <DataTable
+                  columns={CallNputRationColumns}
+                  data={callPutData?.records || []}
+                />
             </div>
           )}
         </div>
