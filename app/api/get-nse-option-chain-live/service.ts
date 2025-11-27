@@ -1,4 +1,7 @@
-import { getTotOIRatio } from "@/app/lib/services/calculations/calculations";
+import {
+  get8StrickObjects,
+  getTotOIRatio,
+} from "@/app/lib/services/calculations/calculations";
 import { getOptionChainIndices } from "@/app/lib/services/nseindia";
 import { NSEOptionChainResponse } from "@/app/lib/types/nseindia/nseindiaType";
 import { APIResponseType } from "@/app/lib/types/response/serviceResponseType";
@@ -19,6 +22,10 @@ async function getOptionChainIndicesService(): Promise<APIResponseType<any>> {
   const NSEOptionChainData: NSEOptionChainResponse = response.data;
   // get totratio
   const totRatio = getTotOIRatio(response.data);
+
+  const nearest8StrickObjects = get8StrickObjects(response.data);
+
+  console.log("Nearest 8 Strike Objects:", nearest8StrickObjects);
 
   // save to database
 

@@ -12,7 +12,7 @@ export async function initializeApp(): Promise<void> {
     await DatabaseHealth.waitForDatabase(5, 2000);
 
     // Start periodic health checks
-    // DatabaseHealth.startPeriodicChecks();
+    DatabaseHealth.startPeriodicChecks();
 
     console.log("✅ Application initialization completed");
   } catch (error) {
