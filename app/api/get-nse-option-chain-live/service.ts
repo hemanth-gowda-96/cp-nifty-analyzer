@@ -1,5 +1,6 @@
 import {
   get8StrickObjects,
+  getCallPutsRatios,
   getTotOIRatio,
 } from "@/app/lib/services/calculations/calculations";
 import { getOptionChainIndices } from "@/app/lib/services/nseindia";
@@ -11,6 +12,19 @@ import { DatabaseHealth } from "@/lib/database/health";
 import prisma from "@/lib/prisma";
 
 async function getOptionChainIndicesService(): Promise<APIResponseType<any>> {
+  // get last saved record from database
+  const lastSavedRecord: NSEOCTotalOIRatio | null =
+    await prisma.nSEOCTotalOIRatio.findFirst({
+      orderBy: {
+        created_date: "desc",
+      },
+    });
+
+  // get last fetched date
+  const lastFetchedDateFromDB = lastSavedRecord
+    ? lastSavedRecord.last_fetched_date
+    : null;
+
   // get data from getOptionChainIndices
   const response: APIResponseType<NSEOptionChainResponse> =
     await getOptionChainIndices();
@@ -20,12 +34,31 @@ async function getOptionChainIndicesService(): Promise<APIResponseType<any>> {
   }
 
   const NSEOptionChainData: NSEOptionChainResponse = response.data;
+
+  // If last fetched date from DB matches the current fetched data, skip saving or less than current
+  if (lastFetchedDateFromDB) {
+    const fetchedDate = DateTimeUtils.convertToISOString(
+      NSEOptionChainData.records.timestamp
+    );
+
+    if (fetchedDate <= lastFetchedDateFromDB) {
+      console.log(
+        "ℹ️ Fetched data is not newer than the last saved record. Skipping database save."
+      );
+      return {
+        code: "S001",
+        message: "Data fetched successfully - No new data to save to database",
+        data: undefined,
+      } as APIResponseType<any>;
+    }
+  }
+
   // get totratio
   const totRatio = getTotOIRatio(response.data);
 
   const nearest8StrickObjects = get8StrickObjects(response.data);
 
-  console.log("Nearest 8 Strike Objects:", nearest8StrickObjects);
+  const allRations = getCallPutsRatios(nearest8StrickObjects);
 
   // save to database
 
@@ -41,14 +74,6 @@ async function getOptionChainIndicesService(): Promise<APIResponseType<any>> {
     lastFetchedDate = new Date();
   }
 
-  // Save to database with real-time connection check
-  console.log("🔍 Attempting to save to database...");
-
-  console.log(
-    "NSEOptionChainData:",
-    NSEOptionChainData.records.underlyingValue
-  );
-
   try {
     // Try to save directly - this will test the connection in real-time
     const resp = await prisma.nSEOCTotalOIRatio.create({
@@ -62,6 +87,23 @@ async function getOptionChainIndicesService(): Promise<APIResponseType<any>> {
       },
     });
     console.log("✅ Successfully saved NSEOCTotalOIRatio:", resp.id);
+
+    // save call puts ratios as well
+    const respRatios = await prisma.nSECallNPutOIRations.create({
+      data: {
+        sum_oi_ce: allRations.sum_oi_ce,
+        sum_oi_pe: allRations.sum_oi_pe,
+        sum_change_in_oi_ce: allRations.sum_change_in_oi_ce,
+        sum_change_in_oi_pe: allRations.sum_change_in_oi_pe,
+        ratio_oi_ce: allRations.ratio_oi_ce,
+        ratio_oi_pe: allRations.ratio_oi_pe,
+        ratio_change_in_oi_ce: allRations.ratio_change_in_oi_ce,
+        ratio_change_in_oi_pe: allRations.ratio_change_in_oi_pe,
+        last_fetched_date: lastFetchedDate,
+        underlying_value: NSEOptionChainData.records.underlyingValue,
+      },
+    });
+    console.log("✅ Successfully saved NSEOCCallPutsRatios:", respRatios.id);
 
     // Update health status to connected on successful save
     DatabaseHealth.checkConnection();

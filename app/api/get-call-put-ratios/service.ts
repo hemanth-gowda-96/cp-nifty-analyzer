@@ -1,11 +1,11 @@
 import { APIResponseType } from "@/app/lib/types/response/serviceResponseType";
-import { serializePrismaRecord } from "@/lib/utils/serialization";
 import prisma from "@/lib/prisma";
+import { serializePrismaRecord } from "@/lib/utils/serialization";
 
-async function getNseOptionChainDbService(): Promise<APIResponseType<any>> {
+async function getNseCallNPutService(): Promise<APIResponseType<any>> {
   let result = [];
   try {
-    result = await prisma.nSEOCTotalOIRatio.findMany({
+    result = await prisma.nSECallNPutOIRations.findMany({
       take: 8,
       orderBy: {
         created_date: "desc",
@@ -35,6 +35,6 @@ async function getNseOptionChainDbService(): Promise<APIResponseType<any>> {
   }
 }
 
-export const getNseOptionChainService = {
-  getNseOptionChainDbService,
+export const getNseCallNPutServices = {
+  getNseCallNPutService,
 };

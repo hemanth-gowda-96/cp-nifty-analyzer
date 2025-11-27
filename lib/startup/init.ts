@@ -1,5 +1,6 @@
 // lib/startup/init.ts
 import { DatabaseHealth } from "../database/health";
+import { startOptionChainBackgroundTask } from "./backgroundTasks";
 
 /**
  * Initialize application startup checks and services
@@ -13,6 +14,9 @@ export async function initializeApp(): Promise<void> {
 
     // Start periodic health checks
     DatabaseHealth.startPeriodicChecks();
+
+    // Start background task for option chain fetch
+    // startOptionChainBackgroundTask();
 
     console.log("✅ Application initialization completed");
   } catch (error) {

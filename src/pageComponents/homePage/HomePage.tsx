@@ -6,23 +6,14 @@ import { DataTable } from "@/components/ui/data-table";
 import { ToiRatioColumns } from "./toiRatioColumns";
 import { ToiRatioChartLineDefault } from "./toiRatioChart";
 import { TitleBar } from "./TitleBar";
+import { CallNputRationColumns } from "./callNputRationColumns";
+import { HPresponseDataInterface, HPresponseDataInterfaceTwo } from "./interfaces/homePageInterface";
 
-interface responseData {
-  records: Array<{
-    id: string;
-    ce_total_oi: number;
-    pe_total_oi: number;
-    underlying_value: number;
-    last_fetched_date: string;
-    ratio: number;
-    created_date: string;
-    last_updated_date: string;
-  }>;
-  count: number;
-}
+
 
 export default function HomePage() {
-  const [data, setData] = useState<responseData | null>(null);
+  const [data, setData] = useState<HPresponseDataInterface | null>(null);
+  const [callPutData, setCallPutData] = useState<HPresponseDataInterfaceTwo | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = async () => {
@@ -31,7 +22,7 @@ export default function HomePage() {
       if (!response.ok) {
         throw new Error("Failed to fetch data");
       }
-      const result: APIResponseType<responseData> = await response.json();
+      const result: APIResponseType<HPresponseDataInterface> = await response.json();
 
       if (result.code !== "S001") {
         setError(result.message);
@@ -45,8 +36,29 @@ export default function HomePage() {
     }
   };
 
+  const fetchCallPutData = async () => {
+    try {
+      const response = await fetch("/api/get-call-put-ratios");
+      if (!response.ok) {
+        throw new Error("Failed to fetch call-put data");
+      }
+      const result: APIResponseType<HPresponseDataInterfaceTwo> = await response.json();
+
+      if (result.code !== "S001") {
+        setError(result.message);
+        return;
+      }
+
+      setCallPutData(result.data);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unknown error");
+    }
+  };
+
   useEffect(() => {
     fetchData();
+    fetchCallPutData();
   }, []);
 
   // Get the latest record for the title bar
@@ -71,6 +83,29 @@ export default function HomePage() {
               <DataTable
                 columns={ToiRatioColumns}
                 data={data.records}
+              ></DataTable>
+            </div>
+          )}
+        </div>
+
+        {/* Right section - 40% */}
+        <div className="flex flex-col">
+          {data && (
+            <div className="h-full">
+              <ToiRatioChartLineDefault data={data.records} />
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="grid grid-cols-[60%_40%] gap-4 p-4">
+        {/* Left section - 60% */}
+        <div className="flex flex-col">
+          {error && <p>Error: {error}</p>}
+          {data && (
+            <div>
+              <DataTable
+                columns={CallNputRationColumns}
+                data={callPutData?.records || []}
               ></DataTable>
             </div>
           )}

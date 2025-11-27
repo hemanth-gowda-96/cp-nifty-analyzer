@@ -49,12 +49,35 @@ export function serializePrismaRecord<T extends Record<string, any>>(
   const serialized = { ...record } as any;
 
   // Convert known BigInt fields
-  const bigIntFields = ["ce_total_oi", "pe_total_oi"];
+  const bigIntFields = [
+    "ce_total_oi",
+    "pe_total_oi",
+    "sum_oi_ce",
+    "sum_oi_pe",
+    "sum_change_in_oi_ce",
+    "sum_change_in_oi_pe",
+  ];
   const dateFields = ["last_fetched_date", "created_date", "last_updated_date"];
+
+  const floatFields = [
+    "underlying_value",
+    "ratio",
+    "ratio_oi_ce",
+    "ratio_oi_pe",
+    "ratio_change_in_oi_ce",
+    "ratio_change_in_oi_pe",
+  ];
 
   for (const field of bigIntFields) {
     if (field in serialized && typeof serialized[field] === "bigint") {
       serialized[field] = Number(serialized[field]);
+    }
+  }
+
+  // Convert known Float fields rounded to 2 decimal places
+  for (const field of floatFields) {
+    if (field in serialized && typeof serialized[field] === "number") {
+      serialized[field] = parseFloat(serialized[field].toFixed(2));
     }
   }
 
