@@ -2,23 +2,49 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+### Local Development
+
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Run the development server:
+   ```bash
+   npm run dev
+   ```
+3. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Running with Docker
+
+1. Build and start all services (Next.js app and Postgres):
+
+   ```bash
+   docker-compose up --build
+   ```
+
+   - The app will be available at [http://localhost:3000](http://localhost:3000)
+   - Postgres will be available at port 5432
+
+2. To stop the services:
+   ```bash
+   docker-compose down
+   ```
+
+### Environment Variables
+
+- The default Postgres connection is set in `docker-compose.yml` as:
+  `DATABASE_URL=postgresql://postgres:password@cp-nifty-postgres:5432/postgres`
+- You can override this in your own `.env` file if needed.
+
+### Database Migrations
+
+If you need to run Prisma migrations, use:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+docker-compose exec cp-nifty-analyzer npx prisma migrate deploy
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
 ## Learn More
 

@@ -47,7 +47,7 @@ export function ToiRatioChartLineDefault({ data }: { data: Array<{ id: string; c
             data={chartData}
             margin={{
               left: 12,
-              right: 12,
+              right: 36,
             }}
           >
             <CartesianGrid vertical={false} />

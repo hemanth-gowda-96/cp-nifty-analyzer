@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { APIResponseType } from "@/app/lib/types/response/serviceResponseType";
 import { DataTable } from "@/components/ui/data-table";
 import { ToiRatioColumns } from "./toiRatioColumns";
-import { ToiRatioChartLineDefault } from "./toiRatioChart";
+import { ToiRatioChartLineDefault } from "./charts/toiRatioChart";
 import { TitleBar } from "./TitleBar";
 import { CallNputRationColumns } from "./callNputRationColumns";
 import { HPresponseDataInterface, HPresponseDataInterfaceTwo } from "./interfaces/homePageInterface";
@@ -59,6 +59,11 @@ export default function HomePage() {
   useEffect(() => {
     fetchData();
     fetchCallPutData();
+    const interval = setInterval(() => {
+      fetchData();
+      fetchCallPutData();
+    }, 30000); // 30 seconds
+    return () => clearInterval(interval);
   }, []);
 
   // Get the latest record for the title bar
@@ -67,12 +72,18 @@ export default function HomePage() {
   console.log("latestRecord", latestRecord);
 
     
+  const handleRefresh = () => {
+    fetchData();
+    fetchCallPutData();
+  };
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen overflow-x-hidden pr-8">
       <TitleBar
-        title="CP Nifty Analyzer"
+        title="NSE Option Chain Total OI Ratio"
         underlyingValue={latestRecord?.underlying_value}
         timestamp={latestRecord?.last_fetched_date}
+        onRefresh={handleRefresh}
       />
       <div className="grid grid-cols-[60%_40%] gap-4 p-4">
         {/* Left section - 60% */}
@@ -89,7 +100,7 @@ export default function HomePage() {
         </div>
 
         {/* Right section - 40% */}
-        <div className="flex flex-col">
+        <div className="flex flex-col pr-8">
           {data && (
             <div className="h-full">
               <ToiRatioChartLineDefault data={data.records} />
@@ -112,12 +123,7 @@ export default function HomePage() {
         </div>
 
         {/* Right section - 40% */}
-        <div className="flex flex-col">
-          {data && (
-            <div className="h-full">
-              <ToiRatioChartLineDefault data={data.records} />
-            </div>
-          )}
+        <div className="flex flex-col pr-8">
         </div>
       </div>
     </div>

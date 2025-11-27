@@ -6,11 +6,19 @@ let intervalId: NodeJS.Timeout | null = null;
 export function startOptionChainBackgroundTask() {
   if (intervalId) return; // Prevent multiple intervals
   intervalId = setInterval(async () => {
-    try {
-      await getOptionChainIndicesService();
-      console.log("[Background] Option chain data fetched and saved.");
-    } catch (err) {
-      console.error("[Background] Error fetching option chain data:", err);
+    const now = new Date();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    // Only run between 10:00am and 4:00pm (16:00)
+    if ((hour > 10 || (hour === 10 && minute >= 0)) && hour < 16) {
+      try {
+        await getOptionChainIndicesService();
+        console.log("[Background] Option chain data fetched and saved.");
+      } catch (err) {
+        console.error("[Background] Error fetching option chain data:", err);
+      }
+    } else {
+      console.log("[Background] Skipped fetch: outside 10:00-16:00");
     }
   }, 120000); // 120 seconds
   console.log("[Background] Started option chain fetch task (every 120s)");
