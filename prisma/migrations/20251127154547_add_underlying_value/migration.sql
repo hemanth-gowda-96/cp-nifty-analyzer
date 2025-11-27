@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "NSEOCTotalOIRatio" ADD COLUMN     "underlying_value" DOUBLE PRECISION NOT NULL DEFAULT 0;
