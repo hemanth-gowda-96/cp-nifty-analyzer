@@ -102,7 +102,7 @@ export default function HomePage() {
         {/* Right section - 40% */}
         <div className="flex flex-col pr-4">
           {data && (
-            <div className="h-full bg-white/95 rounded-xl shadow p-3 border border-gray-200 flex items-center justify-center hover:shadow-lg transition duration-200">
+            <div className="h-full bg-white/95 rounded-xl shadow p-3 border border-gray-200 hover:shadow-lg transition duration-200">
               <ToiRatioChartLineDefault data={data.records} />
             </div>
           )}
