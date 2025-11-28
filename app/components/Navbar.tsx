@@ -11,7 +11,7 @@ import {
 
 export default function Navbar() {
   return (
-    <header className="border border-gray-300 p-4">
+    <header className="border border-gray-300 p-4 flex flex-wrap justify-center">
       <NavigationMenu>
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>

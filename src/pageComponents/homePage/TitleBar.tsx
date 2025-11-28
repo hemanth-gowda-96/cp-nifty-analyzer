@@ -1,6 +1,5 @@
 import React from "react";
 
-
 interface TitleBarProps {
   title: string;
   underlyingValue?: number;
@@ -35,21 +34,27 @@ export const TitleBar: React.FC<TitleBarProps> = ({
     : "N/A";
 
   return (
-    <div className="flex justify-between items-center p-5 shadow-lg rounded-b-xl border-b-4 border-blue-500 bg-gradient-to-r from-gray-900 via-gray-800 to-blue-900 text-white">
-      <div className="text-2xl font-extrabold tracking-tight drop-shadow-lg">{title}</div>
-      <div className="flex gap-8 items-center text-base">
-        <div>
+    <div className="flex flex-col md:flex-row justify-between items-center p-5 shadow-lg rounded-b-xl border-b-4 border-blue-500 bg-gradient-to-r from-gray-900 via-gray-800 to-blue-900 text-white gap-4 md:gap-0">
+      <div className="text-2xl font-extrabold tracking-tight drop-shadow-lg text-center md:text-left">
+        {title}
+      </div>
+      <div className="flex flex-col md:flex-row gap-2 md:gap-8 items-center text-base">
+        <div className="flex items-center">
           <span className="text-gray-300 mr-2">Underlying Value:</span>
-          <span className="font-bold text-green-400 text-lg">{formattedValue}</span>
+          <span className="font-bold text-green-400 text-lg">
+            {formattedValue}
+          </span>
         </div>
-        <div>
+        <div className="flex items-center">
           <span className="text-gray-300 mr-2">As on:</span>
-          <span className="font-semibold text-blue-300">{formattedTimestamp}</span>
+          <span className="font-semibold text-blue-300">
+            {formattedTimestamp}
+          </span>
         </div>
         {onRefresh && (
           <button
             onClick={onRefresh}
-            className="ml-6 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg transition border border-blue-400"
+            className="md:ml-6 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg transition border border-blue-400 w-full md:w-auto mt-2 md:mt-0"
             title="Refresh Data"
           >
             <span className="mr-1">&#x21bb;</span> Refresh
