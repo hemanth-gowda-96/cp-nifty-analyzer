@@ -1,5 +1,19 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Features
+
+- 📈 Live NSE Option Chain OI Ratio dashboard
+- 🗃️ Historical OI ratio and call/put data tables
+- 📊 Interactive area chart for OI ratio trends
+- 🔄 Auto-refresh and manual refresh for live data
+- 🕒 Backend background task for scheduled data fetch (10am–4pm)
+- 🐘 PostgreSQL + Prisma integration
+- 🐳 Docker & docker-compose support for full stack
+- 🧑‍💻 Modern, responsive UI with Tailwind CSS
+- 🩺 Health checks and robust error handling
+
+---
+
 ## Getting Started
 
 ### Local Development
