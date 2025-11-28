@@ -32,12 +32,6 @@ function get8StrickObjects(data: NSEOptionChainResponse): StrikePriceData[] {
 
   const nearest8 = sortedByDiff.slice(0, 9);
 
-  const lowest = Math.min(...nearest8.map((o) => o.strikePrice));
-
-  const cleaned: StrikePriceData[] = nearest8.filter(
-    (o) => o.strikePrice !== lowest
-  );
-
   // remove least obj.strikePrice to make it 8 objects
 
   // console.log("strikePrices:", strikePrices);
@@ -45,7 +39,7 @@ function get8StrickObjects(data: NSEOptionChainResponse): StrikePriceData[] {
   // // console.log("nearest8:", nearest8);
   // console.log("cleaned to 8:", cleaned);
 
-  return cleaned;
+  return nearest8;
 }
 
 function getCallPutsRatios(data: StrikePriceData[]): CallPutsRatiosType {

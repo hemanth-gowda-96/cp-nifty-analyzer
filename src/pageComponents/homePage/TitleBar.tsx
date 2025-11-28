@@ -43,7 +43,7 @@ export const TitleBar: React.FC<TitleBarProps> = ({
           <span className="font-bold text-green-400 text-lg">{formattedValue}</span>
         </div>
         <div>
-          <span className="text-gray-300 mr-2">Last Fetched:</span>
+          <span className="text-gray-300 mr-2">As on:</span>
           <span className="font-semibold text-blue-300">{formattedTimestamp}</span>
         </div>
         {onRefresh && (
