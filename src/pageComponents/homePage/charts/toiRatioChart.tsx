@@ -43,8 +43,6 @@ export function ToiRatioChartLineDefault({ data }: { data: Array<{ id: string; c
       <CardContent className="flex-1 flex flex-col">
         <ChartContainer config={chartConfig} className="flex-1">
           <AreaChart
-            width={600}
-            height={300}
             data={chartData}
             margin={{
               left: 12,

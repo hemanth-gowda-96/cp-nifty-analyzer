@@ -77,14 +77,14 @@ export default function HomePage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen overflow-x-hidden pr-4 bg-gradient-to-br from-blue-50 via-white to-blue-100">
+    <div className="flex flex-col min-h-screen overflow-x-hidden bg-gradient-to-br from-blue-50 via-white to-blue-100">
       <TitleBar
         title="NSE Option Chain Total OI Ratio"
         underlyingValue={latestRecord?.underlying_value}
         timestamp={latestRecord?.last_fetched_date}
         onRefresh={handleRefresh}
       />
-      <div className="grid grid-cols-[60%_40%] gap-4 p-4">
+      <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-4 p-4">
         {/* Left section - 60% */}
         <div className="flex flex-col bg-white/95 rounded-xl shadow p-3 border border-gray-200 hover:shadow-lg transition duration-200">
           <h2 className="text-base font-bold text-blue-900 mb-2 tracking-wide">Total OI Ratio Table</h2>
@@ -100,15 +100,15 @@ export default function HomePage() {
         </div>
 
         {/* Right section - 40% */}
-        <div className="flex flex-col pr-4">
+        <div className="flex flex-col">
           {data && (
-            <div className="h-full bg-white/95 rounded-xl shadow p-3 border border-gray-200 flex items-center justify-center hover:shadow-lg transition duration-200">
+            <div className="h-full bg-white/95 rounded-xl shadow p-3 border border-gray-200 hover:shadow-lg transition duration-200">
               <ToiRatioChartLineDefault data={data.records} />
             </div>
           )}
         </div>
       </div>
-      <div className="grid grid-cols-[60%_40%] gap-4 p-4">
+      <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-4 p-4">
         {/* Left section - 60% */}
         <div className="flex flex-col bg-white/95 rounded-xl shadow p-3 border border-gray-200 hover:shadow-lg transition duration-200">
           <h2 className="text-base font-bold text-blue-900 mb-2 tracking-wide">Call/Put OI Ratio Table</h2>
@@ -124,7 +124,7 @@ export default function HomePage() {
         </div>
 
         {/* Right section - 40% */}
-        <div className="flex flex-col pr-4">
+        <div className="flex flex-col">
         </div>
       </div>
     </div>

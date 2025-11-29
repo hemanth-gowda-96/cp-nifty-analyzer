@@ -41,7 +41,11 @@ async function getOptionChainIndicesService(): Promise<APIResponseType<any>> {
       NSEOptionChainData.records.timestamp
     );
 
-    if (fetchedDate <= lastFetchedDateFromDB) {
+    // Convert both to Date objects for comparison
+    const fetchedDateObj = new Date(fetchedDate);
+    const lastFetchedDateObj = new Date(lastFetchedDateFromDB);
+
+    if (fetchedDateObj <= lastFetchedDateObj) {
       console.log(
         "ℹ️ Fetched data is not newer than the last saved record. Skipping database save."
       );
@@ -65,7 +69,7 @@ async function getOptionChainIndicesService(): Promise<APIResponseType<any>> {
   let lastFetched = NSEOptionChainData.records.timestamp;
 
   // convert lastFetched to Date object with error handling
-  let lastFetchedDate: Date;
+  let lastFetchedDate: string | Date;
   try {
     lastFetchedDate = DateTimeUtils.convertToISOString(lastFetched);
   } catch (error) {

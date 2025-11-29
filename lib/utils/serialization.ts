@@ -85,8 +85,9 @@ export function serializePrismaRecord<T extends Record<string, any>>(
   for (const field of dateFields) {
     if (field in serialized && serialized[field] instanceof Date) {
       const date = serialized[field] as Date;
-      // For last_fetched_date, format as "27 Nov 2025, 9:00 pm"
+
       if (field === "last_fetched_date") {
+        // KEEP ORIGINAL UTC VALUE (no IST conversion)
         serialized[field] = date.toLocaleString("en-GB", {
           day: "numeric",
           month: "short",
@@ -94,9 +95,13 @@ export function serializePrismaRecord<T extends Record<string, any>>(
           hour: "numeric",
           minute: "2-digit",
           hour12: true,
+          timeZone: "UTC", // <-- THIS FIXES THE PROBLEM
         });
       } else {
-        serialized[field] = date.toISOString();
+        // Convert all other dates to IST
+        serialized[field] = date.toLocaleString("en-GB", {
+          timeZone: "Asia/Kolkata",
+        });
       }
     }
   }
