@@ -9,7 +9,7 @@ function getTotOIRatio(data: NSEOptionChainResponse): { totOIRatio: number } {
   const totOICE = data.filtered.CE.totOI;
   const totOIPE = data.filtered.PE.totOI;
 
-  const totOIRatio = parseFloat((totOICE / totOIPE).toFixed(2));
+  const totOIRatio = parseFloat((totOIPE / totOICE).toFixed(2));
 
   return { totOIRatio };
 }

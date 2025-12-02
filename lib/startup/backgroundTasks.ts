@@ -20,8 +20,8 @@ export function startOptionChainBackgroundTask() {
     } else {
       console.log("[Background] Skipped fetch: outside 10:00-16:00");
     }
-  }, 120000); // 120 seconds
-  console.log("[Background] Started option chain fetch task (every 120s)");
+  }, 60000); // 60 seconds
+  console.log("[Background] Started option chain fetch task (every 60s)");
 }
 
 export function stopOptionChainBackgroundTask() {

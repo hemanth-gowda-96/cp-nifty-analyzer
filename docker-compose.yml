@@ -1,19 +1,17 @@
-version: '3.8'
-
 
 services:
-  cp-nifty-analyzer:
-    build: .
-    container_name: cp-nifty-analyzer
-    ports:
-      - "3000:3000"
-    environment:
-      - NODE_ENV=production
-      - DATABASE_URL=postgresql://postgres:password@cp-nifty-postgres:5432/postgres
-    depends_on:
-      - postgres
-    networks:
-      - cp-nifty-network
+  # cp-nifty-analyzer:
+  #   build: .
+  #   container_name: cp-nifty-analyzer
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - DATABASE_URL=postgresql://postgres:password@cp-nifty-postgres:5432/postgres
+  #   depends_on:
+  #     - postgres
+  #   networks:
+  #     - cp-nifty-network
 
   postgres:
     image: postgres:15
