@@ -94,12 +94,20 @@ export function serializePrismaRecord<T extends Record<string, any>>(
           year: "numeric",
           hour: "numeric",
           minute: "2-digit",
+          second: "2-digit",
           hour12: true,
-          timeZone: "UTC", // <-- THIS FIXES THE PROBLEM
+          timeZone: "UTC",
         });
       } else {
         // Convert all other dates to IST
         serialized[field] = date.toLocaleString("en-GB", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true,
           timeZone: "Asia/Kolkata",
         });
       }
