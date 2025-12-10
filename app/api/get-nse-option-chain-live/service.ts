@@ -35,6 +35,10 @@ async function getOptionChainIndicesService(): Promise<APIResponseType<any>> {
 
   const NSEOptionChainData: NSEOptionChainResponse = response.data;
 
+  console.log(
+    `ℹ️ Fetched NSE Option Chain Data at ${NSEOptionChainData.records.timestamp}`
+  );
+
   // If last fetched date from DB matches the current fetched data, skip saving or less than current
   if (lastFetchedDateFromDB) {
     const fetchedDate = DateTimeUtils.convertToISOString(

@@ -1,13 +1,12 @@
 // app/api/shared/services/nseindia.ts
 
+import { CONFIG } from "@/app/config/config";
 import { NSEOptionChainResponse } from "../types/nseindia/nseindiaType";
 import { APIResponseType } from "../types/response/serviceResponseType";
 
 // Service to fetch NSE India option chain indices data
 async function getOptionChainIndices(): Promise<APIResponseType<any>> {
-  const url =
-    "https://www.nseindia.com/api/option-chain-v3?type=Indices&symbol=NIFTY&expiry=" +
-    getExpiryDateParam();
+  const url = CONFIG.NESURL + getExpiryDateParam();
 
   try {
     const response = await fetch(url);
@@ -31,11 +30,19 @@ async function getOptionChainIndices(): Promise<APIResponseType<any>> {
 
 function getExpiryDateParam(): string {
   // output format: "dd-MMM-yyyy" ex: "29-Jan-2026"
-  const now = new Date();
+  // Calculate next Tuesday in IST (UTC+5:30)
+  const nowUTC = new Date();
+  // Convert to IST
+  const nowIST = new Date(nowUTC.getTime() + 5.5 * 60 * 60 * 1000);
 
-  // add 30 days
-  const expiry = new Date(now);
-  expiry.setDate(now.getDate() + 30);
+  const dayOfWeek = nowIST.getDay();
+  let daysUntilNextTuesday = (2 - dayOfWeek + 7) % 7;
+  // If today is Tuesday, use today
+  if (dayOfWeek === 2) {
+    daysUntilNextTuesday = 0;
+  }
+  const expiry = new Date(nowIST);
+  expiry.setDate(nowIST.getDate() + daysUntilNextTuesday);
 
   const day = String(expiry.getDate()).padStart(2, "0");
   const year = expiry.getFullYear();
