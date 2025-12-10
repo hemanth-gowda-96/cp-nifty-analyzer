@@ -75,4 +75,4 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-GET https://www.nseindia.com/api/option-chain-v3?type=Indices&symbol=NIFTY&expiry=09-Dec-2025
+GET https://www.nseindia.com/api/option-chain-v3?type=Indices&symbol=NIFTY&expiry=16-Dec-2025
