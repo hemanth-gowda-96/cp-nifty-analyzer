@@ -37,7 +37,22 @@ export function ToiRatioChartLineDefault({
     .map((item) => {
       // Extract time from "27 Nov 2025, 9:00 pm" format
       const parts = item.last_fetched_date.split(", ");
-      const time = parts.length > 1 ? parts[1] : item.last_fetched_date;
+      let time = parts.length > 1 ? parts[1] : item.last_fetched_date;
+
+      // convert 11:17:48 am to 17:48 format
+      if (time.includes("am") || time.includes("pm")) {
+        const timeParts = time.split(" ");
+        const hm = timeParts[0].split(":");
+        let hours = parseInt(hm[0], 10);
+        const minutes = hm[1];
+        if (timeParts[1] === "pm" && hours < 12) {
+          hours += 12;
+        } else if (timeParts[1] === "am" && hours === 12) {
+          hours = 0;
+        }
+        time = `${hours.toString().padStart(2, "0")}:${minutes}`;
+      }
+
       return {
         time: time,
         ratio: item.ratio,

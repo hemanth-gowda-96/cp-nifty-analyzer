@@ -5,10 +5,12 @@ import { APIResponseType } from "../types/response/serviceResponseType";
 
 // Service to fetch NSE India option chain indices data
 async function getOptionChainIndices(): Promise<APIResponseType<any>> {
+  const url =
+    "https://www.nseindia.com/api/option-chain-v3?type=Indices&symbol=NIFTY&expiry=" +
+    getExpiryDateParam();
+
   try {
-    const response = await fetch(
-      "https://www.nseindia.com/api/option-chain-indices?symbol=NIFTY"
-    );
+    const response = await fetch(url);
     if (!response.ok) {
       throw new Error("Failed to fetch from NSE");
     }
@@ -25,6 +27,35 @@ async function getOptionChainIndices(): Promise<APIResponseType<any>> {
       data: null,
     } as APIResponseType<any>;
   }
+}
+
+function getExpiryDateParam(): string {
+  // output format: "dd-MMM-yyyy" ex: "29-Jan-2026"
+  const now = new Date();
+
+  // add 30 days
+  const expiry = new Date(now);
+  expiry.setDate(now.getDate() + 30);
+
+  const day = String(expiry.getDate()).padStart(2, "0");
+  const year = expiry.getFullYear();
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const month = monthNames[expiry.getMonth()];
+
+  return `${day}-${month}-${year}`;
 }
 
 export { getOptionChainIndices };
