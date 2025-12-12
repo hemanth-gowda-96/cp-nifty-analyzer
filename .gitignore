@@ -1,7 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+
 # dependencies
-/node_modules
+/nextjs-version-deprecated/node_modules
 /.pnp
 .pnp.*
 .yarn/*
@@ -10,34 +11,44 @@
 !.yarn/releases
 !.yarn/versions
 
+
 # testing
-/coverage
+/nextjs-version-deprecated/coverage
+
 
 # next.js
-/.next/
-/out/
+/nextjs-version-deprecated/.next/
+/nextjs-version-deprecated/out/
+
 
 # production
-/build
+/nextjs-version-deprecated/build
+
 
 # misc
 .DS_Store
 *.pem
+/nextjs-version-deprecated/.DS_Store
+
 
 # debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
+nextjs-version-deprecated/npm-debug.log*
+nextjs-version-deprecated/yarn-debug.log*
+nextjs-version-deprecated/yarn-error.log*
+nextjs-version-deprecated/.pnpm-debug.log*
+
 
 # env files (can opt-in for committing if needed)
-.env*
+/nextjs-version-deprecated/.env*
+
 
 # vercel
-.vercel
+/nextjs-version-deprecated/.vercel
+
 
 # typescript
-*.tsbuildinfo
+/nextjs-version-deprecated/*.tsbuildinfo
+nextjs-version-deprecated/dev.db
 next-env.d.ts
 
 /lib/generated/prisma

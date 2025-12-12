@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model NSEOCTotalOIRatio {
+  id                 String   @id @default(cuid())
+  ce_total_oi        BigInt
+  pe_total_oi        BigInt
+  underlying_value   Float    @default(0)
+  last_fetched_date  DateTime
+  ratio              Float
+  created_date       DateTime @default(now())
+  last_updated_date  DateTime @updatedAt
+}
+
+model NSECallNPutOIRations {
+  id String @id @default(cuid())
+  underlying_value   Float    @default(0)
+  sum_oi_ce BigInt
+  sum_oi_pe BigInt
+  sum_change_in_oi_ce BigInt
+  sum_change_in_oi_pe BigInt
+  ratio_oi_ce Float
+  ratio_oi_pe Float
+  ratio_change_in_oi_ce Float
+  ratio_change_in_oi_pe Float
+
+  created_date       DateTime @default(now())
+  last_fetched_date  DateTime
+  last_updated_date  DateTime @updatedAt
+}
