@@ -7,7 +7,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - 📊 Interactive area chart for OI ratio trends
 - 🔄 Auto-refresh and manual refresh for live data
 - 🕒 Backend background task for scheduled data fetch (10am–4pm)
-- 🐘 PostgreSQL + Prisma integration
+- 🗄️ SQLite + Prisma integration
 - 🐳 Docker & docker-compose support for full stack
 - 🧑‍💻 Modern, responsive UI with Tailwind CSS
 - 🩺 Health checks and robust error handling
@@ -30,14 +30,14 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ### Running with Docker
 
-1. Build and start all services (Next.js app and Postgres):
+1. Build and start the Next.js app:
 
    ```bash
    docker-compose up --build
    ```
 
    - The app will be available at [http://localhost:3000](http://localhost:3000)
-   - Postgres will be available at port 5432
+   
 
 2. To stop the services:
    ```bash
@@ -46,16 +46,17 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ### Environment Variables
 
-- The default Postgres connection is set in `docker-compose.yml` as:
-  `DATABASE_URL=postgresql://postgres:password@cp-nifty-postgres:5432/postgres`
-- You can override this in your own `.env` file if needed.
+- The default SQLite database is set in `prisma/schema.prisma` as:
+   `file:./lib/database/db.sqlite`
+   (No environment variable needed)
 
 ### Database Migrations
+
 
 If you need to run Prisma migrations, use:
 
 ```bash
-docker-compose exec cp-nifty-analyzer npx prisma migrate deploy
+npx prisma migrate dev
 ```
 
 ---
