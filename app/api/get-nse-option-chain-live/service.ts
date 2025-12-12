@@ -9,7 +9,7 @@ import { APIResponseType } from "@/app/lib/types/response/serviceResponseType";
 import { DateTimeUtils } from "@/lib/datetime/datetimeUtils";
 import { NSEOCTotalOIRatio } from "@/lib/generated/prisma/client";
 import { DatabaseHealth } from "@/lib/database/health";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 async function getOptionChainIndicesService(): Promise<APIResponseType<any>> {
   // get last saved record from database

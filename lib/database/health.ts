@@ -1,5 +1,6 @@
 // lib/database/health.ts
-import prisma from "../prisma";
+
+import { prisma } from "../prisma";
 
 export class DatabaseHealth {
   private static isConnected: boolean = false;
