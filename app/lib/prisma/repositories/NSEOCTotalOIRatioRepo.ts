@@ -1,5 +1,4 @@
-import { NSEOCTotalOIRatio } from "@/lib/generated/prisma/client";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 
 function getAll() {
   // from NSEOCTotalOIRatio table

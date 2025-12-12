@@ -1,6 +1,6 @@
 import { APIResponseType } from "@/app/lib/types/response/serviceResponseType";
+import { prisma } from "@/lib/prisma";
 import { serializePrismaRecord } from "@/lib/utils/serialization";
-import prisma from "@/lib/prisma";
 
 async function getNseOptionChainDbService(): Promise<APIResponseType<any>> {
   let result = [];

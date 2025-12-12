@@ -1,5 +1,5 @@
 import { APIResponseType } from "@/app/lib/types/response/serviceResponseType";
-import prisma from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { serializePrismaRecord } from "@/lib/utils/serialization";
 
 async function getNseCallNPutService(): Promise<APIResponseType<any>> {
