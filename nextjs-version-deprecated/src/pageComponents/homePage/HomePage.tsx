@@ -11,10 +11,11 @@ import {
   HPresponseDataInterface,
   HPresponseDataInterfaceTwo,
   HPresponseDataResponse,
+  HPresponseDataTwoResp,
 } from "./interfaces/homePageInterface";
 
 export default function HomePage() {
-  const [data, setData] = useState<HPresponseDataInterface[] | null>(null);
+  const [data, setData] = useState<HPresponseDataInterface | null>(null);
   const [callPutData, setCallPutData] =
     useState<HPresponseDataInterfaceTwo | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -22,7 +23,7 @@ export default function HomePage() {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3005/api/get-nse-option-chain"
+        "http://localhost:3005/api/get-call-put-ratios"
       );
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -37,10 +38,9 @@ export default function HomePage() {
         return;
       }
 
-      console.log("result", typeof result.data);
-
       // convert result.data to HPresponseDataInterface[]
-      const data = result.data as HPresponseDataInterface[];
+      const data: HPresponseDataInterface =
+        result.data as unknown as HPresponseDataInterface;
 
       setData(data);
 
@@ -52,19 +52,25 @@ export default function HomePage() {
 
   const fetchCallPutData = async () => {
     try {
-      // const response = await fetch("/api/get-call-put-ratios");
-      // if (!response.ok) {
-      //   throw new Error("Failed to fetch call-put data");
-      // }
-      // const result: APIResponseType<HPresponseDataInterfaceTwo> =
-      //   await response.json();
+      const response = await fetch(
+        "http://localhost:3005/api/get-nse-option-chain"
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch call-put data");
+      }
+      const result: APIResponseType<HPresponseDataTwoResp> =
+        await response.json();
 
-      // if (result.code !== "S001") {
-      //   setError(result.message);
-      //   return;
-      // }
+      if (result.code !== "S001") {
+        setError(result.message);
+        return;
+      }
 
-      setCallPutData(null);
+      // convert result.data to HPresponseDataInterfaceTwo[]
+      const data: HPresponseDataInterfaceTwo =
+        result.data as unknown as HPresponseDataInterfaceTwo;
+
+      setCallPutData(data);
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
@@ -82,7 +88,7 @@ export default function HomePage() {
   }, []);
 
   // Get the latest record for the title bar
-  const latestRecord = data?.[0];
+  const latestRecord = data?.records[0];
 
   const handleRefresh = () => {
     fetchData();
@@ -91,13 +97,13 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen overflow-x-hidden bg-linear-to-br from-blue-50 via-white to-blue-100">
-      {/* <TitleBar
+      <TitleBar
         title="NSE Option Chain Total OI Ratio"
-        underlyingValue={latestRecord?}
-        timestamp={latestRecord?.last_fetched_date}
+        underlyingValue={latestRecord?.underlying_value}
+        timestamp={latestRecord?.last_updated_date}
         onRefresh={handleRefresh}
-      /> */}
-      {/* <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-4 p-4">
+      />
+      <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-4 p-4">
         <div className="flex flex-col bg-white/95 rounded-xl shadow p-3 border border-gray-200 hover:shadow-lg transition duration-200">
           <h2 className="text-base font-bold text-blue-900 mb-2 tracking-wide">
             Total OI Ratio Table
@@ -109,7 +115,7 @@ export default function HomePage() {
           )}
           {data && (
             <div className="overflow-x-auto">
-              <DataTable columns={ToiRatioColumns} data={data.data} />
+              <DataTable columns={ToiRatioColumns} data={data.records} />
             </div>
           )}
         </div>
@@ -117,12 +123,12 @@ export default function HomePage() {
         <div className="flex flex-col">
           {data && (
             <div className="h-full bg-white/95 rounded-xl shadow p-3 border border-gray-200 hover:shadow-lg transition duration-200">
-              <ToiRatioChartLineDefault data={data.data} />
+              <ToiRatioChartLineDefault data={data.records} />
             </div>
           )}
         </div>
-      </div> */}
-      {/* <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-4 p-4">
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-4 p-4">
         <div className="flex flex-col bg-white/95 rounded-xl shadow p-3 border border-gray-200 hover:shadow-lg transition duration-200">
           <h2 className="text-base font-bold text-blue-900 mb-2 tracking-wide">
             Call/Put OI Ratio Table
@@ -142,7 +148,7 @@ export default function HomePage() {
           )}
         </div>
         <div className="flex flex-col"></div>
-      </div> */}
+      </div>
     </div>
   );
 }

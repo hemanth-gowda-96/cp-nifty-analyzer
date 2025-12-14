@@ -45,10 +45,15 @@ func RegisterRoutes(app *fiber.App) {
 			})
 		}
 
+		response := map[string]interface{}{
+			"records": result,
+			"count":   len(result),
+		}
+
 		resp := sharedTypes.ApiResponse{
 			Code:    "S001",
 			Message: "Success",
-			Data:    result,
+			Data:    response,
 		}
 		return c.JSON(resp)
 	})
