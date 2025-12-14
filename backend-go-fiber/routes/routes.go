@@ -10,7 +10,7 @@ import (
 )
 
 func RegisterRoutes(app *fiber.App) {
-	app.Get("/get-call-put-ratios", func(c *fiber.Ctx) error {
+	app.Get("/api/get-call-put-ratios", func(c *fiber.Ctx) error {
 
 		result, err := sqlite.GetLast8TotalOIRatios()
 		if err != nil {
@@ -21,15 +21,20 @@ func RegisterRoutes(app *fiber.App) {
 			})
 		}
 
+		response := map[string]interface{}{
+			"records": result,
+			"count":   len(result),
+		}
+
 		resp := sharedTypes.ApiResponse{
 			Code:    "S001",
 			Message: "Success",
-			Data:    result,
+			Data:    response,
 		}
 		return c.JSON(resp)
 	})
 
-	app.Get("/get-nse-option-chain", func(c *fiber.Ctx) error {
+	app.Get("/api/get-nse-option-chain", func(c *fiber.Ctx) error {
 
 		result, err := sqlite.GetLatestCallPutOIRatios()
 		if err != nil {
