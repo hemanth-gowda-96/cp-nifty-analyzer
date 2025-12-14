@@ -58,7 +58,7 @@ func RegisterRoutes(app *fiber.App) {
 		return c.JSON(resp)
 	})
 
-	app.Get("/get-nse-option-chain-live", func(c *fiber.Ctx) error {
+	app.Get("/api/get-nse-option-chain-live", func(c *fiber.Ctx) error {
 
 		result := nseIntegration.GetNesOptionChainLive()
 

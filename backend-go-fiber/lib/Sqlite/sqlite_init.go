@@ -2,6 +2,7 @@ package sqlite
 
 import (
 	"backend-go-fiber/models"
+	"math"
 	"time"
 )
 
@@ -38,6 +39,16 @@ func GetLast8TotalOIRatios() ([]models.NSEOCTotalOIRatio, error) {
 		return nil, result.Error
 	}
 
+	// convert time to 27 Nov 2025, 9:00 pm
+	for i := range records {
+		records[i].LastFetchedDateStr = records[i].LastFetchedDate.Format("02 Jan 2006, 03:04 pm")
+		records[i].CreatedDateStr = records[i].CreatedDate.Format("02 Jan 2006, 03:04 pm")
+		records[i].LastUpdatedDateStr = records[i].LastUpdatedDate.Format("02 Jan 2006, 03:04 pm")
+
+		// round of ratio
+		records[i].Ratio = math.Round(records[i].Ratio*100) / 100
+	}
+
 	return records, nil
 }
 
@@ -51,21 +62,7 @@ func GetLatestCallPutOIRatios() ([]models.NSECallNPutOIRations, error) {
 		return nil, result.Error
 	}
 
-	return records, nil
-}
-
-// GetCallPutOIRatiosByDateRange retrieves call and put OI ratios records within a date range
-func GetCallPutOIRatiosByDateRange(startDate, endDate time.Time) ([]models.NSECallNPutOIRations, error) {
-	db := GetDB()
-	var records []models.NSECallNPutOIRations
-
-	result := db.Where("created_date BETWEEN ? AND ?", startDate, endDate).
-		Order("created_date DESC").
-		Find(&records)
-
-	if result.Error != nil {
-		return nil, result.Error
-	}
+	// convert
 
 	return records, nil
 }

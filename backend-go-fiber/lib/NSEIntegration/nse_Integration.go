@@ -61,6 +61,8 @@ func GetNesOptionChainLive() sharedTypes.ServiceResponse {
 
 	convertedTimeStamp := convertTimestampToTime(nseResp.Records.Timestamp)
 
+	fmt.Println("convertedTimeStamp", convertedTimeStamp)
+
 	strikePriceData, err := Get8StrickObjects(nseResp)
 
 	if err != nil {
@@ -142,14 +144,20 @@ func getExpiryDateParam() string {
 }
 
 func convertTimestampToTime(timestamp string) time.Time {
-
-	// ex : 12-Dec-2025 15:30:00
-
 	layout := "02-Jan-2006 15:04:05"
 
-	t, err := time.Parse(layout, timestamp)
+	// Load the Indian Standard Time (IST) location
+	loc, err := time.LoadLocation("Asia/Kolkata")
+	if err != nil {
+		// Handle error loading location, though for standard names it's rare
+		return time.Time{}
+	}
+
+	// Parse the timestamp string in the specified location
+	t, err := time.ParseInLocation(layout, timestamp, loc)
 	if err != nil {
 		return time.Time{}
 	}
+
 	return t
 }

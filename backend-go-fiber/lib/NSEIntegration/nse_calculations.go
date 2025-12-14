@@ -2,7 +2,6 @@ package NSEIntegration
 
 import (
 	"backend-go-fiber/models"
-	"fmt"
 	"math"
 	"sort"
 	"time"
@@ -80,16 +79,16 @@ func GetCallPutsRatios(data []StrikePriceData, underlyingValue float64, lastFetc
 		}
 	}
 
-	fmt.Println("sumOiCe", sumOiCe)
-	fmt.Println("sumOiPe", sumOiPe)
-	fmt.Println("sumChangeInOiCe", sumChangeInOiCe)
-	fmt.Println("sumChangeInOiPe", sumChangeInOiPe)
+	// fmt.Println("sumOiCe", sumOiCe)
+	// fmt.Println("sumOiPe", sumOiPe)
+	// fmt.Println("sumChangeInOiCe", sumChangeInOiCe)
+	// fmt.Println("sumChangeInOiPe", sumChangeInOiPe)
 
 	grandtotalOi := sumOiCe + sumOiPe
 	grandtotalChangeInOi := sumChangeInOiCe + sumChangeInOiPe
 
-	fmt.Println("grandtotalOi", grandtotalOi)
-	fmt.Println("grandtotalChangeInOi", grandtotalChangeInOi)
+	// fmt.Println("grandtotalOi", grandtotalOi)
+	// fmt.Println("grandtotalChangeInOi", grandtotalChangeInOi)
 
 	var ratioOiCe float64
 	var ratioOiPe float64
@@ -98,8 +97,8 @@ func GetCallPutsRatios(data []StrikePriceData, underlyingValue float64, lastFetc
 		ratioOiPe = (float64(sumOiPe) / float64(grandtotalOi)) * 100
 	}
 
-	fmt.Println("ratioOiCe", ratioOiCe)
-	fmt.Println("ratioOiPe", ratioOiPe)
+	// fmt.Println("ratioOiCe", ratioOiCe)
+	// fmt.Println("ratioOiPe", ratioOiPe)
 
 	var ratioChangeInOiCe float64
 	var ratioChangeInOiPe float64
@@ -108,8 +107,8 @@ func GetCallPutsRatios(data []StrikePriceData, underlyingValue float64, lastFetc
 		ratioChangeInOiPe = (float64(sumChangeInOiPe) / float64(grandtotalChangeInOi)) * 100
 	}
 
-	fmt.Println("ratioChangeInOiCe", ratioChangeInOiCe)
-	fmt.Println("ratioChangeInOiPe", ratioChangeInOiPe)
+	// fmt.Println("ratioChangeInOiCe", ratioChangeInOiCe)
+	// fmt.Println("ratioChangeInOiPe", ratioChangeInOiPe)
 
 	record := models.NSECallNPutOIRations{
 		UnderlyingValue:   underlyingValue,

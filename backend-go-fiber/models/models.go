@@ -8,14 +8,17 @@ import (
 )
 
 type NSEOCTotalOIRatio struct {
-	ID              string    `gorm:"primaryKey;type:text" json:"id"`
-	CETotalOI       int64     `json:"ce_total_oi"`
-	PETotalOI       int64     `json:"pe_total_oi"`
-	UnderlyingValue float64   `json:"underlying_value" gorm:"default:0"`
-	LastFetchedDate time.Time `json:"last_fetched_date"`
-	Ratio           float64   `json:"ratio"`
-	CreatedDate     time.Time `json:"created_date" gorm:"autoCreateTime"`
-	LastUpdatedDate time.Time `json:"last_updated_date" gorm:"autoUpdateTime"`
+	ID                 string    `gorm:"primaryKey;type:text" json:"id"`
+	CETotalOI          int64     `json:"ce_total_oi"`
+	PETotalOI          int64     `json:"pe_total_oi"`
+	UnderlyingValue    float64   `json:"underlying_value" gorm:"default:0"`
+	LastFetchedDate    time.Time `json:"last_fetched_date"`
+	Ratio              float64   `json:"ratio"`
+	CreatedDate        time.Time `json:"created_date" gorm:"autoCreateTime"`
+	LastUpdatedDate    time.Time `json:"last_updated_date" gorm:"autoUpdateTime"`
+	LastFetchedDateStr string    `json:"last_fetched_date_str"`
+	CreatedDateStr     string    `json:"created_date_str"`
+	LastUpdatedDateStr string    `json:"last_updated_date_str"`
 }
 
 // BeforeCreate hook to generate UUID before creating record
@@ -27,19 +30,22 @@ func (n *NSEOCTotalOIRatio) BeforeCreate(tx *gorm.DB) error {
 }
 
 type NSECallNPutOIRations struct {
-	ID                string    `gorm:"primaryKey;type:text" json:"id"`
-	UnderlyingValue   float64   `json:"underlying_value" gorm:"default:0"`
-	SumOICe           float64   `json:"sum_oi_ce"`
-	SumOIPe           float64   `json:"sum_oi_pe"`
-	SumChangeInOICe   float64   `json:"sum_change_in_oi_ce"`
-	SumChangeInOIPe   float64   `json:"sum_change_in_oi_pe"`
-	RatioOICe         float64   `json:"ratio_oi_ce"`
-	RatioOIPe         float64   `json:"ratio_oi_pe"`
-	RatioChangeInOICe float64   `json:"ratio_change_in_oi_ce"`
-	RatioChangeInOIPe float64   `json:"ratio_change_in_oi_pe"`
-	CreatedDate       time.Time `json:"created_date" gorm:"autoCreateTime"`
-	LastFetchedDate   time.Time `json:"last_fetched_date"`
-	LastUpdatedDate   time.Time `json:"last_updated_date" gorm:"autoUpdateTime"`
+	ID                 string    `gorm:"primaryKey;type:text" json:"id"`
+	UnderlyingValue    float64   `json:"underlying_value" gorm:"default:0"`
+	SumOICe            float64   `json:"sum_oi_ce"`
+	SumOIPe            float64   `json:"sum_oi_pe"`
+	SumChangeInOICe    float64   `json:"sum_change_in_oi_ce"`
+	SumChangeInOIPe    float64   `json:"sum_change_in_oi_pe"`
+	RatioOICe          float64   `json:"ratio_oi_ce"`
+	RatioOIPe          float64   `json:"ratio_oi_pe"`
+	RatioChangeInOICe  float64   `json:"ratio_change_in_oi_ce"`
+	RatioChangeInOIPe  float64   `json:"ratio_change_in_oi_pe"`
+	CreatedDate        time.Time `json:"created_date" gorm:"autoCreateTime"`
+	LastFetchedDate    time.Time `json:"last_fetched_date"`
+	LastUpdatedDate    time.Time `json:"last_updated_date" gorm:"autoUpdateTime"`
+	LastFetchedDateStr string    `json:"last_fetched_date_str"`
+	CreatedDateStr     string    `json:"created_date_str"`
+	LastUpdatedDateStr string    `json:"last_updated_date_str"`
 }
 
 // BeforeCreate hook to generate UUID before creating record
