@@ -3,6 +3,7 @@ package NSEIntegration
 import (
 	"backend-go-fiber/config"
 	resty "backend-go-fiber/lib/HttpHelper/Resty"
+	sqlite "backend-go-fiber/lib/Sqlite"
 	sharedTypes "backend-go-fiber/shared/types"
 	"encoding/json"
 	"fmt"
@@ -45,14 +46,78 @@ func GetNesOptionChainLive() sharedTypes.ServiceResponse {
 		}
 	}
 
-	fmt.Println("NSE Option Chain Live Data fetched successfully")
-	fmt.Println("Expiry Date:", getExpiryDateParam())
-	fmt.Println("Data Timestamp:", nseResp.Records.Timestamp)
+	// get totOIRatio
+
+	totOIRatioResponse, err := GetTotOIRatio(nseResp)
+
+	if err != nil {
+		return sharedTypes.ServiceResponse{
+			Code:    "E003",
+			Message: "Failed to get tot OI ratio",
+			Data:    err,
+			Error:   err,
+		}
+	}
+
+	convertedTimeStamp := convertTimestampToTime(nseResp.Records.Timestamp)
+
+	fmt.Println("convertedTimeStamp", convertedTimeStamp)
+
+	strikePriceData, err := Get8StrickObjects(nseResp)
+
+	if err != nil {
+		return sharedTypes.ServiceResponse{
+			Code:    "E003",
+			Message: "Failed to get strike price data",
+			Data:    err,
+			Error:   err,
+		}
+	}
+
+	callPutsRatios, err := GetCallPutsRatios(strikePriceData, nseResp.Records.UnderlyingValue, convertedTimeStamp)
+
+	if err != nil {
+		return sharedTypes.ServiceResponse{
+			Code:    "E004",
+			Message: "Failed to get call puts ratios",
+			Data:    err,
+			Error:   err,
+		}
+	}
+
+	// save
+	err = sqlite.SaveTotalOIRatio(nseResp.Filtered.CE.TotOI, nseResp.Filtered.PE.TotOI, nseResp.Records.UnderlyingValue, convertedTimeStamp, totOIRatioResponse)
+
+	if err != nil {
+		return sharedTypes.ServiceResponse{
+			Code:    "E005",
+			Message: "Failed to save tot OI ratio",
+			Data:    err,
+			Error:   err,
+		}
+	}
+
+	err = sqlite.SaveCallPutOIRatios(&callPutsRatios)
+
+	if err != nil {
+		return sharedTypes.ServiceResponse{
+			Code:    "E005",
+			Message: "Failed to save call puts ratios",
+			Data:    err,
+			Error:   err,
+		}
+	}
+
+	response := map[string]interface{}{
+		"totOIRatio":      totOIRatioResponse,
+		"strikePriceData": strikePriceData,
+		"callPutsRatios":  callPutsRatios,
+	}
 
 	return sharedTypes.ServiceResponse{
-		Code:    "200",
+		Code:    "S001",
 		Message: "Success",
-		Data:    nseResp,
+		Data:    response,
 		Error:   nil,
 	}
 }
@@ -76,4 +141,23 @@ func getExpiryDateParam() string {
 	}
 	month := monthNames[expiry.Month()-1]
 	return fmt.Sprintf("%02d-%s-%d", day, month, year)
+}
+
+func convertTimestampToTime(timestamp string) time.Time {
+	layout := "02-Jan-2006 15:04:05"
+
+	// Load the Indian Standard Time (IST) location
+	loc, err := time.LoadLocation("Asia/Kolkata")
+	if err != nil {
+		// Handle error loading location, though for standard names it's rare
+		return time.Time{}
+	}
+
+	// Parse the timestamp string in the specified location
+	t, err := time.ParseInLocation(layout, timestamp, loc)
+	if err != nil {
+		return time.Time{}
+	}
+
+	return t
 }

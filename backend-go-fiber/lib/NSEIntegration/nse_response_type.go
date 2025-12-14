@@ -53,3 +53,43 @@ type NSEResponse struct {
 	Records  NSECurrentRecords `json:"records"`
 	Filtered NSEFiltered       `json:"filtered"`
 }
+
+type OptionData struct {
+	StrikePrice           float64 `json:"strikePrice"`
+	ExpiryDate            string  `json:"expiryDate"`
+	Underlying            string  `json:"underlying"`
+	Identifier            string  `json:"identifier"`
+	OpenInterest          float64 `json:"openInterest"`
+	ChangeInOpenInterest  float64 `json:"changeinOpenInterest"`
+	PChangeInOpenInterest float64 `json:"pchangeinOpenInterest"`
+	TotalTradedVolume     float64 `json:"totalTradedVolume"`
+	ImpliedVolatility     float64 `json:"impliedVolatility"`
+	LastPrice             float64 `json:"lastPrice"`
+	Change                float64 `json:"change"`
+	PChange               float64 `json:"pChange"`
+	TotalBuyQuantity      float64 `json:"totalBuyQuantity"`
+	TotalSellQuantity     float64 `json:"totalSellQuantity"`
+	BidQty                float64 `json:"bidQty"`
+	BidPrice              float64 `json:"bidprice"`
+	AskQty                float64 `json:"askQty"`
+	AskPrice              float64 `json:"askPrice"`
+	UnderlyingValue       float64 `json:"underlyingValue"`
+}
+
+type StrikePriceData struct {
+	StrikePrice float64     `json:"strikePrice"`
+	ExpiryDate  string      `json:"expiryDate"`
+	CE          *OptionData `json:"CE,omitempty"`
+	PE          *OptionData `json:"PE,omitempty"`
+}
+
+type CallPutsRatios struct {
+	SumOiCe           float64 `json:"sum_oi_ce"`
+	SumOiPe           float64 `json:"sum_oi_pe"`
+	SumChangeInOiCe   float64 `json:"sum_change_in_oi_ce"`
+	SumChangeInOiPe   float64 `json:"sum_change_in_oi_pe"`
+	RatioOiCe         float64 `json:"ratio_oi_ce"`
+	RatioOiPe         float64 `json:"ratio_oi_pe"`
+	RatioChangeInOiCe float64 `json:"ratio_change_in_oi_ce"`
+	RatioChangeInOiPe float64 `json:"ratio_change_in_oi_pe"`
+}

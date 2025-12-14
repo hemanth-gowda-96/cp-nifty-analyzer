@@ -1,14 +1,14 @@
 package SharedTypes
 
 type ApiResponse struct {
-	Code    string
-	Message string
-	Data    any
+	Code    string `json:"code"`
+	Message string `json:"message"`
+	Data    any    `json:"data"`
 }
 
 type ServiceResponse struct {
-	Code    string
-	Message string
-	Data    any
-	Error   error
+	Code    string `json:"code"`
+	Message string `json:"message"`
+	Data    any    `json:"data"`
+	Error   error  `json:"error"`
 }

@@ -29,15 +29,15 @@ export function ToiRatioChartLineDefault({
     last_fetched_date: string;
     ratio: number;
     created_date: string;
-    last_updated_date: string;
+    last_fetched_date_str: string;
   }>;
 }) {
   // Transform data to fit chartData structure
   const chartData = data
     .map((item) => {
       // Extract time from "27 Nov 2025, 9:00 pm" format
-      const parts = item.last_fetched_date.split(", ");
-      let time = parts.length > 1 ? parts[1] : item.last_fetched_date;
+      const parts = item.last_fetched_date_str.split(", ");
+      let time = parts.length > 1 ? parts[1] : item.last_fetched_date_str;
 
       // convert 11:17:48 am to 17:48 format
       if (time.includes("am") || time.includes("pm")) {
