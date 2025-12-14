@@ -29,10 +29,10 @@ func (n *NSEOCTotalOIRatio) BeforeCreate(tx *gorm.DB) error {
 type NSECallNPutOIRations struct {
 	ID                string    `gorm:"primaryKey;type:text" json:"id"`
 	UnderlyingValue   float64   `json:"underlying_value" gorm:"default:0"`
-	SumOICe           int64     `json:"sum_oi_ce"`
-	SumOIPe           int64     `json:"sum_oi_pe"`
-	SumChangeInOICe   int64     `json:"sum_change_in_oi_ce"`
-	SumChangeInOIPe   int64     `json:"sum_change_in_oi_pe"`
+	SumOICe           float64   `json:"sum_oi_ce"`
+	SumOIPe           float64   `json:"sum_oi_pe"`
+	SumChangeInOICe   float64   `json:"sum_change_in_oi_ce"`
+	SumChangeInOIPe   float64   `json:"sum_change_in_oi_pe"`
 	RatioOICe         float64   `json:"ratio_oi_ce"`
 	RatioOIPe         float64   `json:"ratio_oi_pe"`
 	RatioChangeInOICe float64   `json:"ratio_change_in_oi_ce"`

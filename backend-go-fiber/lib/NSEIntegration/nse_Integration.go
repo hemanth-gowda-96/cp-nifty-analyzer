@@ -3,6 +3,7 @@ package NSEIntegration
 import (
 	"backend-go-fiber/config"
 	resty "backend-go-fiber/lib/HttpHelper/Resty"
+	sqlite "backend-go-fiber/lib/Sqlite"
 	sharedTypes "backend-go-fiber/shared/types"
 	"encoding/json"
 	"fmt"
@@ -58,6 +59,8 @@ func GetNesOptionChainLive() sharedTypes.ServiceResponse {
 		}
 	}
 
+	convertedTimeStamp := convertTimestampToTime(nseResp.Records.Timestamp)
+
 	strikePriceData, err := Get8StrickObjects(nseResp)
 
 	if err != nil {
@@ -69,7 +72,7 @@ func GetNesOptionChainLive() sharedTypes.ServiceResponse {
 		}
 	}
 
-	callPutsRatios, err := GetCallPutsRatios(strikePriceData)
+	callPutsRatios, err := GetCallPutsRatios(strikePriceData, nseResp.Records.UnderlyingValue, convertedTimeStamp)
 
 	if err != nil {
 		return sharedTypes.ServiceResponse{
@@ -80,10 +83,28 @@ func GetNesOptionChainLive() sharedTypes.ServiceResponse {
 		}
 	}
 
-	convertedTimeStamp := convertTimestampToTime(nseResp.Records.Timestamp)
-
 	// save
-	SaveTotOIRatio(nseResp.Filtered.CE.TotOI, nseResp.Filtered.PE.TotOI, nseResp.Records.UnderlyingValue, convertedTimeStamp, totOIRatioResponse)
+	err = sqlite.SaveTotalOIRatio(nseResp.Filtered.CE.TotOI, nseResp.Filtered.PE.TotOI, nseResp.Records.UnderlyingValue, convertedTimeStamp, totOIRatioResponse)
+
+	if err != nil {
+		return sharedTypes.ServiceResponse{
+			Code:    "E005",
+			Message: "Failed to save tot OI ratio",
+			Data:    err,
+			Error:   err,
+		}
+	}
+
+	err = sqlite.SaveCallPutOIRatios(&callPutsRatios)
+
+	if err != nil {
+		return sharedTypes.ServiceResponse{
+			Code:    "E005",
+			Message: "Failed to save call puts ratios",
+			Data:    err,
+			Error:   err,
+		}
+	}
 
 	response := map[string]interface{}{
 		"totOIRatio":      totOIRatioResponse,

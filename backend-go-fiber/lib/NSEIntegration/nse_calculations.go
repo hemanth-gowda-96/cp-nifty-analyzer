@@ -1,8 +1,11 @@
 package NSEIntegration
 
 import (
+	"backend-go-fiber/models"
+	"fmt"
 	"math"
 	"sort"
+	"time"
 )
 
 func GetTotOIRatio(data NSEResponse) (float64, error) {
@@ -60,7 +63,7 @@ func Get8StrickObjects(data NSEResponse) ([]StrikePriceData, error) {
 	return nearestStrikes, nil
 }
 
-func GetCallPutsRatios(data []StrikePriceData) (CallPutsRatios, error) {
+func GetCallPutsRatios(data []StrikePriceData, underlyingValue float64, lastFetchedDate time.Time) (models.NSECallNPutOIRations, error) {
 	var sumOiCe float64
 	var sumOiPe float64
 	var sumChangeInOiCe float64
@@ -77,8 +80,16 @@ func GetCallPutsRatios(data []StrikePriceData) (CallPutsRatios, error) {
 		}
 	}
 
+	fmt.Println("sumOiCe", sumOiCe)
+	fmt.Println("sumOiPe", sumOiPe)
+	fmt.Println("sumChangeInOiCe", sumChangeInOiCe)
+	fmt.Println("sumChangeInOiPe", sumChangeInOiPe)
+
 	grandtotalOi := sumOiCe + sumOiPe
 	grandtotalChangeInOi := sumChangeInOiCe + sumChangeInOiPe
+
+	fmt.Println("grandtotalOi", grandtotalOi)
+	fmt.Println("grandtotalChangeInOi", grandtotalChangeInOi)
 
 	var ratioOiCe float64
 	var ratioOiPe float64
@@ -87,6 +98,9 @@ func GetCallPutsRatios(data []StrikePriceData) (CallPutsRatios, error) {
 		ratioOiPe = (float64(sumOiPe) / float64(grandtotalOi)) * 100
 	}
 
+	fmt.Println("ratioOiCe", ratioOiCe)
+	fmt.Println("ratioOiPe", ratioOiPe)
+
 	var ratioChangeInOiCe float64
 	var ratioChangeInOiPe float64
 	if grandtotalChangeInOi != 0 {
@@ -94,16 +108,23 @@ func GetCallPutsRatios(data []StrikePriceData) (CallPutsRatios, error) {
 		ratioChangeInOiPe = (float64(sumChangeInOiPe) / float64(grandtotalChangeInOi)) * 100
 	}
 
-	return CallPutsRatios{
-		SumOiCe:           sumOiCe,
-		SumOiPe:           sumOiPe,
-		SumChangeInOiCe:   sumChangeInOiCe,
-		SumChangeInOiPe:   sumChangeInOiPe,
-		RatioOiCe:         ratioOiCe,
-		RatioOiPe:         ratioOiPe,
-		RatioChangeInOiCe: ratioChangeInOiCe,
-		RatioChangeInOiPe: ratioChangeInOiPe,
-	}, nil
+	fmt.Println("ratioChangeInOiCe", ratioChangeInOiCe)
+	fmt.Println("ratioChangeInOiPe", ratioChangeInOiPe)
+
+	record := models.NSECallNPutOIRations{
+		UnderlyingValue:   underlyingValue,
+		SumOICe:           sumOiCe,
+		SumOIPe:           sumOiPe,
+		SumChangeInOICe:   sumChangeInOiCe,
+		SumChangeInOIPe:   sumChangeInOiPe,
+		RatioOICe:         ratioOiCe,
+		RatioOIPe:         ratioOiPe,
+		RatioChangeInOICe: ratioChangeInOiCe,
+		RatioChangeInOIPe: ratioChangeInOiPe,
+		LastFetchedDate:   lastFetchedDate,
+	}
+
+	return record, nil
 }
 
 // Helper methods
