@@ -57,3 +57,5 @@ next-env.d.ts
 .db
 .sqlite3
 *.exe
+
+backend-go-fiber/static

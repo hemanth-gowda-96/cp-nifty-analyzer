@@ -46,6 +46,32 @@ func GetNesOptionChainLive() sharedTypes.ServiceResponse {
 		}
 	}
 
+	// get last record
+	lastRecord, err := sqlite.GetLatestTotalOIRatio()
+	if err != nil {
+		return sharedTypes.ServiceResponse{
+			Code:    "E002",
+			Message: "Failed to get last record",
+			Data:    err,
+			Error:   err,
+		}
+	}
+
+	// get last_fetch_date
+	lastFetchDate := lastRecord.LastFetchedDate
+	currentFetchDate := convertTimestampToTime(nseResp.Records.Timestamp)
+
+	// check if last_fetch_date is same as current_fetch_date
+	if lastFetchDate.Equal(currentFetchDate) {
+
+		return sharedTypes.ServiceResponse{
+			Code:    "S001",
+			Message: "Success",
+			Data:    "No new data available",
+			Error:   nil,
+		}
+	}
+
 	// get totOIRatio
 
 	totOIRatioResponse, err := GetTotOIRatio(nseResp)
