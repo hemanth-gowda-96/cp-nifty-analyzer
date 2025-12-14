@@ -32,13 +32,6 @@ function get8StrickObjects(data: NSEOptionChainResponse): StrikePriceData[] {
 
   const nearest8 = sortedByDiff.slice(0, 9);
 
-  // remove least obj.strikePrice to make it 8 objects
-
-  // console.log("strikePrices:", strikePrices);
-  // console.log("roundedStrikePrice:", roundedStrikePrice);
-  // // console.log("nearest8:", nearest8);
-  // console.log("cleaned to 8:", cleaned);
-
   return nearest8;
 }
 
