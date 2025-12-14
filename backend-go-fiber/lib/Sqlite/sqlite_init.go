@@ -62,7 +62,17 @@ func GetLatestCallPutOIRatios() ([]models.NSECallNPutOIRations, error) {
 		return nil, result.Error
 	}
 
-	// convert
+	for i := range records {
+		records[i].LastFetchedDateStr = records[i].LastFetchedDate.Format("02 Jan 2006, 03:04 pm")
+		records[i].CreatedDateStr = records[i].CreatedDate.Format("02 Jan 2006, 03:04 pm")
+		records[i].LastUpdatedDateStr = records[i].LastUpdatedDate.Format("02 Jan 2006, 03:04 pm")
+
+		// round of ratio
+		records[i].RatioOICe = math.Round(records[i].RatioOICe*100) / 100
+		records[i].RatioOIPe = math.Round(records[i].RatioOIPe*100) / 100
+		records[i].RatioChangeInOICe = math.Round(records[i].RatioChangeInOICe*100) / 100
+		records[i].RatioChangeInOIPe = math.Round(records[i].RatioChangeInOIPe*100) / 100
+	}
 
 	return records, nil
 }

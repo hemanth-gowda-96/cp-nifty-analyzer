@@ -36,6 +36,9 @@ export interface HPresponseDataInterfaceTwo {
     created_date: string;
     last_fetched_date: string;
     last_updated_date: string;
+    last_fetched_date_str: string;
+    created_date_str: string;
+    last_updated_date_str: string;
   }>;
   count: number;
 }
