@@ -12,11 +12,14 @@ export type ToiRatioColumnsType = {
   ratio: number;
   created_date: string;
   last_updated_date: string;
+  last_fetched_date_str: string;
+  created_date_str: string;
+  last_updated_date_str: string;
 };
 
 export const ToiRatioColumns: ColumnDef<ToiRatioColumnsType>[] = [
   {
-    accessorKey: "last_fetched_date",
+    accessorKey: "last_fetched_date_str",
     header: "Last Fetched Date",
   },
   {

@@ -31,8 +31,6 @@ export default function HomePage() {
       const result: APIResponseType<HPresponseDataResponse> =
         await response.json();
 
-      console.log("result", result.code);
-
       if (result.code !== "S001") {
         setError(result.message);
         return;
@@ -100,7 +98,7 @@ export default function HomePage() {
       <TitleBar
         title="NSE Option Chain Total OI Ratio"
         underlyingValue={latestRecord?.underlying_value}
-        timestamp={latestRecord?.last_updated_date}
+        timestamp={latestRecord?.last_fetched_date_str}
         onRefresh={handleRefresh}
       />
       <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-4 p-4">
