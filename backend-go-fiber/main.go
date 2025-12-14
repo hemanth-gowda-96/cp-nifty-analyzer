@@ -25,7 +25,18 @@ func main() {
 	db.AutoMigrate(&models.NSEOCTotalOIRatio{}, &models.NSECallNPutOIRations{}, &models.HealthCheck{})
 
 	// create health check record
-	db.Create(&models.HealthCheck{})
+
+	if db.Select("1=1").Find(&models.HealthCheck{}).RowsAffected < 1 {
+		db.Create(&models.HealthCheck{})
+	}
+
+	// check if connected or stop
+	if db.Select("1=1").Find(&models.HealthCheck{}).RowsAffected < 1 {
+		log.Fatal("failed to connect database")
+
+		// stop
+		return
+	}
 
 	app := fiber.New()
 

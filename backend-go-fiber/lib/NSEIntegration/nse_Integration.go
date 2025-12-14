@@ -45,14 +45,53 @@ func GetNesOptionChainLive() sharedTypes.ServiceResponse {
 		}
 	}
 
-	fmt.Println("NSE Option Chain Live Data fetched successfully")
-	fmt.Println("Expiry Date:", getExpiryDateParam())
-	fmt.Println("Data Timestamp:", nseResp.Records.Timestamp)
+	// get totOIRatio
+
+	totOIRatioResponse, err := GetTotOIRatio(nseResp)
+
+	if err != nil {
+		return sharedTypes.ServiceResponse{
+			Code:    "E003",
+			Message: "Failed to get tot OI ratio",
+			Data:    err,
+			Error:   err,
+		}
+	}
+
+	strikePriceData, err := Get8StrickObjects(nseResp)
+
+	if err != nil {
+		return sharedTypes.ServiceResponse{
+			Code:    "E003",
+			Message: "Failed to get strike price data",
+			Data:    err,
+			Error:   err,
+		}
+	}
+
+	callPutsRatios, err := GetCallPutsRatios(strikePriceData)
+
+	if err != nil {
+		return sharedTypes.ServiceResponse{
+			Code:    "E004",
+			Message: "Failed to get call puts ratios",
+			Data:    err,
+			Error:   err,
+		}
+	}
+
+	// store
+
+	response := map[string]interface{}{
+		"totOIRatio":      totOIRatioResponse,
+		"strikePriceData": strikePriceData,
+		"callPutsRatios":  callPutsRatios,
+	}
 
 	return sharedTypes.ServiceResponse{
-		Code:    "200",
+		Code:    "S001",
 		Message: "Success",
-		Data:    nseResp,
+		Data:    response,
 		Error:   nil,
 	}
 }
