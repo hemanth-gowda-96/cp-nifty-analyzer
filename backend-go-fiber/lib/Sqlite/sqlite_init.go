@@ -29,40 +29,24 @@ func SaveCallPutOIRatios(record *models.NSECallNPutOIRations) error {
 }
 
 // GetLatestTotalOIRatio retrieves the latest total OI ratio record
-func GetLatestTotalOIRatio() (*models.NSEOCTotalOIRatio, error) {
-	db := GetDB()
-	var record models.NSEOCTotalOIRatio
-
-	result := db.Order("created_date DESC").First(&record)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-
-	return &record, nil
-}
-
-// GetLatestCallPutOIRatios retrieves the latest call and put OI ratios record
-func GetLatestCallPutOIRatios() (*models.NSECallNPutOIRations, error) {
-	db := GetDB()
-	var record models.NSECallNPutOIRations
-
-	result := db.Order("created_date DESC").First(&record)
-	if result.Error != nil {
-		return nil, result.Error
-	}
-
-	return &record, nil
-}
-
-// GetTotalOIRatiosByDateRange retrieves total OI ratio records within a date range
-func GetTotalOIRatiosByDateRange(startDate, endDate time.Time) ([]models.NSEOCTotalOIRatio, error) {
+func GetLast8TotalOIRatios() ([]models.NSEOCTotalOIRatio, error) {
 	db := GetDB()
 	var records []models.NSEOCTotalOIRatio
 
-	result := db.Where("created_date BETWEEN ? AND ?", startDate, endDate).
-		Order("created_date DESC").
-		Find(&records)
+	result := db.Order("created_date DESC").Limit(8).Find(&records)
+	if result.Error != nil {
+		return nil, result.Error
+	}
 
+	return records, nil
+}
+
+// GetLatestCallPutOIRatios retrieves the latest call and put OI ratios record
+func GetLatestCallPutOIRatios() ([]models.NSECallNPutOIRations, error) {
+	db := GetDB()
+	var records []models.NSECallNPutOIRations
+
+	result := db.Order("created_date DESC").Limit(8).Find(&records)
 	if result.Error != nil {
 		return nil, result.Error
 	}

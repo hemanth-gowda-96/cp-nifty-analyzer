@@ -4,25 +4,46 @@ import (
 	sharedTypes "backend-go-fiber/shared/types"
 
 	nseIntegration "backend-go-fiber/lib/NSEIntegration"
+	sqlite "backend-go-fiber/lib/Sqlite"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 func RegisterRoutes(app *fiber.App) {
 	app.Get("/get-call-put-ratios", func(c *fiber.Ctx) error {
+
+		result, err := sqlite.GetLast8TotalOIRatios()
+		if err != nil {
+			return c.JSON(sharedTypes.ApiResponse{
+				Code:    "500",
+				Message: "Internal Server Error",
+				Data:    "Error fetching call and put ratios",
+			})
+		}
+
 		resp := sharedTypes.ApiResponse{
-			Code:    "200",
+			Code:    "S001",
 			Message: "Success",
-			Data:    "get-call-put-ratios endpoint",
+			Data:    result,
 		}
 		return c.JSON(resp)
 	})
 
 	app.Get("/get-nse-option-chain", func(c *fiber.Ctx) error {
+
+		result, err := sqlite.GetLatestCallPutOIRatios()
+		if err != nil {
+			return c.JSON(sharedTypes.ApiResponse{
+				Code:    "500",
+				Message: "Internal Server Error",
+				Data:    "Error fetching call and put ratios",
+			})
+		}
+
 		resp := sharedTypes.ApiResponse{
-			Code:    "200",
+			Code:    "S001",
 			Message: "Success",
-			Data:    "get-nse-option-chain endpoint",
+			Data:    result,
 		}
 		return c.JSON(resp)
 	})
