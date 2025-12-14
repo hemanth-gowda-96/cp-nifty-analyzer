@@ -80,7 +80,10 @@ func GetNesOptionChainLive() sharedTypes.ServiceResponse {
 		}
 	}
 
-	// store
+	convertedTimeStamp := convertTimestampToTime(nseResp.Records.Timestamp)
+
+	// save
+	SaveTotOIRatio(nseResp.Filtered.CE.TotOI, nseResp.Filtered.PE.TotOI, nseResp.Records.UnderlyingValue, convertedTimeStamp, totOIRatioResponse)
 
 	response := map[string]interface{}{
 		"totOIRatio":      totOIRatioResponse,
@@ -115,4 +118,17 @@ func getExpiryDateParam() string {
 	}
 	month := monthNames[expiry.Month()-1]
 	return fmt.Sprintf("%02d-%s-%d", day, month, year)
+}
+
+func convertTimestampToTime(timestamp string) time.Time {
+
+	// ex : 12-Dec-2025 15:30:00
+
+	layout := "02-Jan-2006 15:04:05"
+
+	t, err := time.Parse(layout, timestamp)
+	if err != nil {
+		return time.Time{}
+	}
+	return t
 }

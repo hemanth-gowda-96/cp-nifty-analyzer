@@ -1,41 +1,18 @@
 package main
 
 import (
-	"backend-go-fiber/models"
+	sqlite "backend-go-fiber/lib/Sqlite"
 	"backend-go-fiber/routes"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
-	_ "modernc.org/sqlite" // Pure Go SQLite driver
 )
 
 func main() {
-
-	// Use pure Go SQLite driver (modernc.org/sqlite) instead of CGO-based driver
-	db, err := gorm.Open(sqlite.Dialector{
-		DriverName: "sqlite",
-		DSN:        "gorm.db",
-	}, &gorm.Config{})
+	// Initialize database
+	_, err := sqlite.InitDB()
 	if err != nil {
-		log.Fatal("failed to connect database: ", err)
-	}
-
-	db.AutoMigrate(&models.NSEOCTotalOIRatio{}, &models.NSECallNPutOIRations{}, &models.HealthCheck{})
-
-	// create health check record
-
-	if db.Select("1=1").Find(&models.HealthCheck{}).RowsAffected < 1 {
-		db.Create(&models.HealthCheck{})
-	}
-
-	// check if connected or stop
-	if db.Select("1=1").Find(&models.HealthCheck{}).RowsAffected < 1 {
-		log.Fatal("failed to connect database")
-
-		// stop
-		return
+		log.Fatal("failed to initialize database: ", err)
 	}
 
 	app := fiber.New()
