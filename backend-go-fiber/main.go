@@ -3,6 +3,7 @@ package main
 import (
 	sqlite "backend-go-fiber/lib/Sqlite"
 	"backend-go-fiber/routes"
+	"backend-go-fiber/utils/scheduler"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -15,6 +16,15 @@ func main() {
 	if err != nil {
 		log.Fatal("failed to initialize database: ", err)
 	}
+
+	// Initialize and start the scheduler
+	schedulerConfig := scheduler.SchedulerConfig{
+		IntervalSeconds: 30,   // Configurable interval in seconds
+		RunOnStart:      true, // Run immediately on start
+	}
+	nseScheduler := scheduler.NewScheduler(schedulerConfig)
+	nseScheduler.Start()
+	log.Println("NSE data scheduler initialized and started")
 
 	app := fiber.New()
 

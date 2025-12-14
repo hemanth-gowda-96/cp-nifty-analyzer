@@ -30,6 +30,27 @@ func SaveCallPutOIRatios(record *models.NSECallNPutOIRations) error {
 }
 
 // GetLatestTotalOIRatio retrieves the latest total OI ratio record
+func GetLatestTotalOIRatio() (models.NSEOCTotalOIRatio, error) {
+	db := GetDB()
+	var record models.NSEOCTotalOIRatio
+
+	result := db.Order("created_date DESC").Limit(1).Find(&record)
+	if result.Error != nil {
+		return record, result.Error
+	}
+
+	// convert time to 27 Nov 2025, 9:00 pm
+	record.LastFetchedDateStr = record.LastFetchedDate.Format("02 Jan 2006, 03:04 pm")
+	record.CreatedDateStr = record.CreatedDate.Format("02 Jan 2006, 03:04 pm")
+	record.LastUpdatedDateStr = record.LastUpdatedDate.Format("02 Jan 2006, 03:04 pm")
+
+	// round of ratio
+	record.Ratio = math.Round(record.Ratio*100) / 100
+
+	return record, nil
+}
+
+// GetLatestTotalOIRatio retrieves the latest total OI ratio record
 func GetLast8TotalOIRatios() ([]models.NSEOCTotalOIRatio, error) {
 	db := GetDB()
 	var records []models.NSEOCTotalOIRatio
