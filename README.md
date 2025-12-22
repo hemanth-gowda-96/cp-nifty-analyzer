@@ -11,15 +11,22 @@ A comprehensive tool for analyzing Nifty market data, specifically focusing on o
 - **Persistent Storage**: Uses SQLite with GORM for reliable and zero-config data storage.
 - **Automated Scheduling**: Includes a built-in scheduler to fetch market data at configurable intervals (default: 30s).
 
+### 🗺️ Planned Features
+
+- [ ] **Multi-tenant Support**: Support for multiple users with independent configurations and watchlists.
+- [ ] **Real-time Dashboards**: Dynamic visualization of option Greeks and IV.
+- [ ] **Alerting System**: Webhook and Email notifications based on custom thresholds.
+- [ ] **Export Options**: Export analysis data to Excel/CSV for further processing.
+
 ## 🛠️ Tech Stack
 
 ### Backend
 
 - **Language**: Go (Golang) 1.24+
-- **Framework**: [Fiber v2](https://gofiber.io/) - Express-inspired web framework for Go.
+- **Framework**: [Fiber v2](https://gofiber.io/) - Fast, Express-inspired web framework.
 - **Database**: SQLite (via `modernc.org/sqlite` and `gorm`).
-- **ORM**: [GORM](https://gorm.io/) - The fantastic ORM library for Golang.
-- **Networking**: `go-resty` for HTTP client operations.
+- **ORM**: [GORM](https://gorm.io/) - Developer-friendly ORM for Golang.
+- **Networking**: `go-resty` for robust HTTP communications.
 
 ### Frontend
 
@@ -28,66 +35,70 @@ A comprehensive tool for analyzing Nifty market data, specifically focusing on o
 
 ## 📂 Project Structure
 
-```
+```bash
 cp-nifty-analyzer/
-├── backend-go-fiber/    # Main Go application
-│   ├── main.go          # Application entry point & server configuration
-│   ├── routes/          # API route definitions
-│   ├── services/        # Business logic and data processing
-│   ├── lib/             # Shared libraries (Database, etc.)
-│   ├── models/          # GORM database models
-│   ├── static/          # Embedded frontend static files
-│   └── go.mod           # Go module definitions
-├── data/                # Data storage (SQLite DB)
-└── README.md            # You are here
+├── backend-go-fiber/           # Main Go application
+│   ├── main.go                 # server entry & config
+│   ├── routes/                 # API route definitions
+│   ├── services/               # Business logic
+│   ├── lib/                    # Shared libraries (NSE, SQLite, Http)
+│   ├── models/                 # Database schemas
+│   ├── static/                 # Embedded frontend (bundled)
+│   └── utils/                  # Utility functions & Scheduler
+├── nextjs-version-deprecated/  # Frontend source code
+├── data/                       # Local SQLite database storage
+└── move_out_folder.sh          # Helper script to sync frontend build to backend
 ```
 
 ## ⚡ Getting Started
 
 ### Prerequisites
 
-- [Go](https://go.dev/dl/) (version 1.24 or higher)
+- [Go](https://go.dev/dl/) (1.24+)
+- [Node.js](https://nodejs.org/) (for frontend changes)
 
 ### Installation & Running
 
-1.  Navigate to the backend directory:
+1. **Backend**:
 
-    ```bash
-    cd backend-go-fiber
-    ```
+   ```bash
+   cd backend-go-fiber
+   go mod tidy
+   go run main.go
+   ```
 
-2.  Install dependencies:
-
-    ```bash
-    go mod tidy
-    ```
-
-3.  Run the application:
-    ```bash
-    go run main.go
-    ```
+2. **Frontend (Optional - for development)**:
+   ```bash
+   cd nextjs-version-deprecated
+   npm install
+   npm run dev
+   ```
 
 The server will start on port `3005`.
-Open [http://localhost:3005](http://localhost:3005) in your browser to view the application.
+Open [http://localhost:3005](http://localhost:3005) in your browser.
 
-## 📦 Building for Production
+## 📦 Production Build
 
-To build a standalone executable that includes the frontend:
+To build the standalone executable:
 
-1.  Ensure your frontend static files are in `backend-go-fiber/static`.
-2.  Build the binary:
-    ```bash
-    cd backend-go-fiber
-    go build -o cp-nifty-analyzer.exe main.go
-    ```
-3.  Run the executable:
-    ```bash
-    ./cp-nifty-analyzer.exe
-    ```
+1. **Build Frontend**:
 
-## 🔄 Scheduler
+   ```bash
+   cd nextjs-version-deprecated
+   npm run build
+   cd ..
+   ./move_out_folder.sh
+   ```
 
-The application includes an internal scheduler (`utils/scheduler`) that runs automatically on startup. It is configured to fetch fresh data every 30 seconds.
+2. **Build Backend**:
+   ```bash
+   cd backend-go-fiber
+   go build -o cp-nifty-analyzer.exe main.go
+   ```
+
+## 🔄 Data Scheduler
+
+The system automatically fetches fresh data from NSE every **30 seconds**. This is managed by the internal scheduler in `utils/scheduler`.
 
 ## 📝 License
 
